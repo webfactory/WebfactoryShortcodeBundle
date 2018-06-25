@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <!-- Definition of a ShortcodeFacade instance. -->
+        <service id="webfactory.shortcode.facade" class="Thunder\Shortcode\ShortcodeFacade">
+            <!-- Event handler that removes <p>...</p> tag that directly wrap shortcodes. -->
+            <call method="addEventHandler">
+                <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
+                <argument type="service">
+                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
+                </argument>
+            </call>
+        </service>
+
+        <!-- Base definition for the EmbedForShortcodeHandler with esi renderer. -->
+        <service abstract="true" id="webfactory.shortcode.embed_esi_for_shortcode_handler" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
+            <argument type="service" id="fragment.handler"/>
+            <argument><!-- Controller name placeholder argument --></argument>
+            <argument>esi</argument>
+        </service>
+
+        <!-- Base definition for the EmbedForShortcodeHandler with inline renderer. -->
+        <service abstract="true" id="webfactory.shortcode.embed_inline_for_shortcode_handler" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
+            <argument type="service" id="fragment.handler"/>
+            <argument><!-- Controller name placeholder argument --></argument>
+            <argument>inline</argument>
+        </service>
+
+        <!-- Twig extension providing the |shortcodes filter. The content will be passed to the ShortcodeFacade. -->
+        <service class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
+            <argument type="service" id="webfactory.shortcode.facade"/>
+            <tag name="twig.extension"/>
+        </service>
+
+    </services>
+</container>
