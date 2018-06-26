@@ -11,7 +11,7 @@ use Thunder\Shortcode\Shortcode\ShortcodeInterface;
  *
  * The attributes of the shortcode will be passed on as parameters to the controller.
  */
-final class EmbeddedShortcodeHandler
+class EmbeddedShortcodeHandler
 {
     /** @var FragmentHandler */
     private $fragmentHandler;
