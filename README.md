@@ -11,11 +11,12 @@ used by users in user generated content to embed some other content or markup. E
 comment: 
 
 ```
-[image src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]
+[image url="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]
 [text color="red"]This is red text.[/text]
 ```
 
-In analogy to living style guides, this bundle also provides an optional shortcode guide. 
+In analogy to living style guides, this bundle also provides an optional shortcode guide. This guide can be used for
+automated testing of your shortcodes as well. 
  
 
 ## Installation
@@ -86,7 +87,7 @@ after the name in the suqared brackets wll be considered as parameters that will
 
 ### Full example
 
-To allow a user input of ```[image src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]``` to be replaced
+To allow a user input of ```[image url="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]``` to be replaced
 with HTML markup for this image, use the twig filter "shortcodes" on the user input:
 
 ```twig
@@ -147,12 +148,11 @@ final class EmbeddedImageController
      */
     public function showAction($url)
     {
-        return $this->twigEngine->renderResponse(
-            '@App/EmbeddedImage/show.html.twig',
-            [
-                'url' => $url,
-            ]
-        );
+        if (!$url) {
+            throw new \RuntimeException('No url provided');
+        }
+
+        return $this->twigEngine->renderResponse('@App/EmbeddedImage/show.html.twig', ['url' => $url]);
     }
 }
 ```
@@ -161,7 +161,9 @@ And finally a twig template like this:
 
 ```twig
 {# src/Ressources/views/EmbeddedImage/show.html.twig #}
-<img src="{{ url }}" />
+<div class="shortcode-container">
+    <img src="{{ url }}" />
+</div>
 ```
 
 
@@ -210,17 +212,64 @@ Finally, enrich your shortcode tags with description and example attributes for 
             <tag
                 name="webfactory.shortcode"
                 shortcode="image"
-                description="Renders an image tag with the source {src}."
-                example="img src=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"
+                description="Renders an image tag with the {url} as it's source."
+                example="image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"
             />
         </service>
     </services>
 </container>
 ```
 
-With the route prefix defined as above, call /shortcodes/ to get the list of shortcodes and follow the links to the
+With the route prefix defined as above, call ```/shortcodes/``` to get the list of shortcodes and follow the links to the
 detail pages.
 
+
+### Automated Tests for your Shortcodes
+
+With the shortcode guide enabled (remember: you may enable it just in your test environment), you can easily write
+functional tests for your shortcodes using the rendered detail pages. This way, you can test even shortcodes with
+complex dependencies. But as functional tests are slow, you may want to keep your shortcode tests in a seperate slow
+test suite.   
+
+To speed things up, the bundle provides the abstract ```\Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest```
+class for you to extend. Using it, your test class may look like this (we recommend one test class for each shortcode):
+
+```php
+<?php
+
+namespace AppBundle\Tests\Shortcodes;
+
+use Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest;
+
+final class SeiteTeaserTest extends ShortcodeTest
+{
+    protected function getShortcodeToTest()
+    {
+        return 'image';
+    }
+
+    /** @test */
+    public function teaser_gets_rendered()
+    {
+        // without $customParameters, crawlRenderedExample() will crawl a page rendering the example configured in the
+        // shortcode tag, in this case "image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"  
+        $crawler = $this->crawlRenderedExample();
+
+        $this->assertCount(1, $crawler->filter('.shortcode-container'));
+        $this->assertCount(1, $crawler->filter('.shortcode-container img[src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]'));
+    }
+
+    /** @test */
+    public function teaser_to_nonexisting_page_gives_error()
+    {
+        // both crawlRenderedExample() and assertHttpStatusCodeWhenCrawlingRenderedExample() accept a $customParameters
+        // argument that will replace the parameters provided in the configuration of the shortcode tag.
+        // This can be used to cover more test cases, e.g. an unhappy path
+        $this->assertHttpStatusCodeWhenCrawlingRenderedExample(500, 'url=');
+    }
+}
+```
+ 
 
 ## Credits, Copyright and License
 
