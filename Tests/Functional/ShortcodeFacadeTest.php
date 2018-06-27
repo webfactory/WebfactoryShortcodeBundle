@@ -2,11 +2,28 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
-final class ShortcodeTest extends ShortcodeTestCase
+final class ShortcodeFacadeTest extends KernelTestCase
 {
+    /**
+     * @var array [
+     *     [
+     *         'controller' => 'app.controller.myFilter:myfilterPartialAction',
+     *         'renderer' => 'esi',
+     *         'name' => 'myShortcode',
+     *     ]
+     * ]
+     */
+    static protected $shortcodesToRegister = [];
+
+    protected static function createKernel(array $options = array())
+    {
+        return new TestKernel('test', true, static::$shortcodesToRegister);
+    }
+
     /** @test */
     public function shortcode_leads_to_rendering_of_controller_reference()
     {
@@ -72,5 +89,22 @@ final class ShortcodeTest extends ShortcodeTestCase
             '<p>Content without shortcode</p>',
             $this->renderTwigTemplate('{{ \'<p>Content without shortcode</p>\' | shortcodes }}', [])
         );
+    }
+
+    /**
+     * @param string $templateCode
+     * @param array $context
+     * @return string
+     */
+    protected function renderTwigTemplate($templateCode, array $context)
+    {
+        /** @var $container ContainerInterface */
+        $container = static::$kernel->getContainer();
+
+        /** @var \Twig_Environment $twig */
+        $twig = $container->get('twig');
+        $template = $twig->createTemplate($templateCode);
+
+        return $template->render($context);
     }
 }

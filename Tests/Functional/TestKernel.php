@@ -45,6 +45,18 @@ final class TestKernel extends Kernel
     private $shortcodeDefinitions = [];
 
     /**
+     * @param string $environment The environment
+     * @param bool   $debug       Whether to enable debugging or not
+     * @param array  $shortcodeDefinitions
+     */
+    public function __construct($environment, $debug, array $shortcodeDefinitions)
+    {
+        parent::__construct($environment, $debug);
+        $this->shortcodeDefinitions = $shortcodeDefinitions;
+    }
+
+
+    /**
      * Returns an array of bundles to register.
      *
      * @return BundleInterface[] An array of bundle instances
@@ -133,14 +145,6 @@ final class TestKernel extends Kernel
     public function __destruct()
     {
         (new Filesystem())->remove($this->getCacheDir());
-    }
-
-    /**
-     * @param array $shortcodeDefinitions
-     */
-    public function setShortcodesToRegister($shortcodeDefinitions)
-    {
-        $this->shortcodeDefinitions = $shortcodeDefinitions;
     }
 
     /**
