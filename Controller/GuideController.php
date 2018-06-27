@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -44,10 +45,16 @@ final class GuideController
      * @Template()
      * @return array
      */
-    public function detailAction($shortcode)
+    public function detailAction($shortcode, Request $request)
     {
         foreach ($this->shortcodeTags as $shortcodeTag) {
             if ($shortcodeTag['shortcode'] === $shortcode) {
+                // if custom parameters are provided, replace the example
+                $customParameters = $request->get('customParameters');
+                if ($customParameters) {
+                    $shortcodeTag['example'] = $shortcode . ' ' . $customParameters;
+                }
+
                 return [
                     'shortcodeTag' => $shortcodeTag,
                 ];
