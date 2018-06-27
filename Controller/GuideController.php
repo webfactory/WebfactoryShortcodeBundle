@@ -1,0 +1,59 @@
+<?php
+
+namespace Webfactory\ShortcodeBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * Guide for the configured shortcodes showing a list overview and detail pages with the rendered shortcode.
+ */
+final class GuideController
+{
+    /**
+     * @var array [
+     *     [
+     *         'shortcode' => 'img'
+     *         'example' (optional key) => '[img src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]'
+     *         'description' (optional key) => 'Embeds the imgage located at {src}.'
+     *     ]
+     * ]
+     */
+    private $shortcodeTags;
+
+    public function __construct(array $shortcodeTags)
+    {
+        $this->shortcodeTags = $shortcodeTags;
+    }
+
+    /**
+     * @Template()
+     * @return array
+     */
+    public function listAction()
+    {
+        return [
+            'shortcodeTags' => $this->shortcodeTags
+        ];
+    }
+
+    /**
+     * @Template()
+     * @return array
+     */
+    public function detailAction($shortcode)
+    {
+        foreach ($this->shortcodeTags as $shortcodeTag) {
+            if ($shortcodeTag['shortcode'] === $shortcode) {
+                return [
+                    'shortcodeTag' => $shortcodeTag,
+                ];
+            }
+        }
+
+        throw new NotFoundHttpException();
+    }
+}

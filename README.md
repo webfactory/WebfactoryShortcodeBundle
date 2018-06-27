@@ -6,15 +6,16 @@
 
 WebfactoryShortcodeBundle is a Symfony bundle that integrates [thunderer/Shortcode](https://github.com/thunderer/Shortcode).
 
-Shortcodes are special text fragments that can be used in user generated content to embed some other content or markup.
-E.g. a user could use the following in a comment: 
+It allows you to define shortcodes and their replacements in a jiffy. Shortcodes are special text fragments that can be
+used by users in user generated content to embed some other content or markup. E.g. a user could use the following in a
+comment: 
 
 ```
 [image src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]
 [text color="red"]This is red text.[/text]
 ```
 
-This bundle allows you to define shortcodes and their replacements in a jiffy.
+In analogy to living style guides, this bundle also provides an optional shortcode guide. 
  
 
 ## Installation
@@ -60,6 +61,8 @@ public function registerBundles()
 
 ## Usage
 
+### Defining your own shortcodes
+
 The easiest way is to add one anonymous service for each shortcode in your services definition:
 
 ```xml  
@@ -80,7 +83,7 @@ one huge ShortcodeController for all shortcodes. But of course, that's up to you
 Finally ```your-shortcode-name``` is the name the users can use in their text inside the squared bracktes. Anything
 after the name in the suqared brackets wll be considered as parameters that will be passed onto the controller.   
 
-## Putting it all together
+### Full example
 
 To allow a user input of ```[image src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]``` to be replaced
 with HTML markup for this image, use the twig filter "shortcodes" on the user input:
@@ -96,9 +99,7 @@ Then, write a service definition like this:
 
 ```xml  
 <?xml version="1.0" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
     
         <!-- ... -->
@@ -161,6 +162,63 @@ And finally a twig template like this:
 {# src/Ressources/views/EmbeddedImage/show.html.twig #}
 <img src="{{ url }}" />
 ```
+
+
+### Activating the Shortcode Guide
+
+The optional shortcode guide is a controller providing an overview page of the configured shortcodes and a detail page
+for each shortcode including a rendered example. Activate it in three simple steps:
+
+At first, include the controller service definition. It is located at ```webfactory/shortcode-bundle/Resources/config/guide.xml```.
+You can easily import it from your own configurations, just have a think about the correct environment. E.g.:
+
+```xml
+<!-- src/AppBundle/Resources/config/shortcodes.xml -->
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="../../../../vendor/webfactory/shortcode-bundle/Resources/config/guide.xml"/>
+    </imports>
+
+    <!-- your shortcode services -->
+</container>
+```
+
+Secondly, include the routes located at ```@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml```, again
+considering the environment. Maybe you want to restrict access in your security configuration.
+
+```yaml
+# src/routing.yml
+shortcode-guide:
+    prefix: /shortcodes
+    resource: "@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml"
+```
+
+Finally, enrich your shortcode tags with description and example attributes for the guide:
+
+```xml
+<!-- src/AppBundle/Resources/config/shortcodes.xml -->
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!-- import guide.xml -->
+
+    <services>
+        <service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+            <argument index="1">app.controller.embedded_image:showAction</argument>
+            <tag
+                name="webfactory.shortcode"
+                shortcode="image"
+                description="Renders an image tag with the source {src}."
+                example="img src=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"
+            />
+        </service>
+    </services>
+</container>
+```
+
+With the route prefix defined as above, call /shortcodes/ to get the list of shortcodes and follow the links to the
+detail pages.
 
 
 ## Credits, Copyright and License

@@ -1,0 +1,47 @@
+{% extends '@WebfactoryShortcode/Guide/page.html.twig' %}
+
+{% block title %}
+    List of Shortcodes
+{% endblock %}
+
+{% block content %}
+    <h1>List of Shortcode</h1>
+
+    {% if shortcodeTags %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shortcodeTag in shortcodeTags %}
+                    <tr>
+                        <th>
+                            <a href="{{ path('webfactory.shortcode.guide-detail', {'shortcode': shortcodeTag.shortcode}) }}">{{ shortcodeTag.shortcode }}</a>
+                        </th>
+                        <td>
+                            {% if shortcodeTag.description is defined %}
+                                {{ shortcodeTag.description }}
+                            {% else %}
+                                No description configured
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if shortcodeTag.example is defined %}
+                                [{{ shortcodeTag.example }}]
+                            {% else %}
+                                No example configured
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No shortcodes configured.</p>
+        <p>See the <a href="https://github.com/webfactory/WebfactoryShortcodeBundle/blob/master/README.md">README.md of the WebfactoryShortcodeBundle</a> to configure some.</p>
+    {% endif %}
+{% endblock %}

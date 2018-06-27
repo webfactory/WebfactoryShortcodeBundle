@@ -1,0 +1,30 @@
+{% extends '@WebfactoryShortcode/Guide/page.html.twig' %}
+
+{% block title %}
+    Shortcode {{ shortcodeTag.shortcode }}
+{% endblock %}
+
+{% block content %}
+    <h1>Shortcode {{ shortcodeTag.shortcode }}</h1>
+    <p>
+        {% if shortcodeTag.description is defined %}
+            {{ shortcodeTag.description }}
+        {% else %}
+            No description configured.
+        {% endif %}
+    </p>
+
+    <h2>Example</h2>
+    {% if shortcodeTag.example is defined %}
+        <p>[{{ shortcodeTag.example }}] becomes:</p>
+        <div>
+            {{ ('[' ~ shortcodeTag.example ~ ']') |shortcodes }}
+        </div>
+    {% else %}
+        <p>No example configured.</p>
+    {% endif %}
+
+    <p>
+        <a href="{{ path('webfactory.shortcode.guide-list') }}">Back to the shortcodes list</a>
+    </p>
+{% endblock %}
