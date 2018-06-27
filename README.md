@@ -236,12 +236,13 @@ class for you to extend. Using it, your test class may look like this (we recomm
 
 ```php
 <?php
+# src/AppBundle/Tests/Shortcodes/ImageTest.php
 
 namespace AppBundle\Tests\Shortcodes;
 
 use Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest;
 
-final class SeiteTeaserTest extends ShortcodeTest
+final class ImageTest extends ShortcodeTest
 {
     protected function getShortcodeToTest()
     {
