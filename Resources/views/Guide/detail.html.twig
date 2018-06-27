@@ -17,7 +17,7 @@
     <h2>Example</h2>
     {% if shortcodeTag.example is defined %}
         <p>[{{ shortcodeTag.example }}] becomes:</p>
-        <div>
+        <div id="rendered-example">
             {{ ('[' ~ shortcodeTag.example ~ ']') |shortcodes }}
         </div>
     {% else %}
