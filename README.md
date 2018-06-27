@@ -72,8 +72,9 @@ The easiest way is to add one anonymous service for each shortcode in your servi
 </service>
 ```
 
-The parent ```webfactory.shortcode.embed_esi_for_shortcode_handler``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html),
-while the parent ```webfactory.shortcode.embed_inline_for_shortcode_handler``` ill use inline rendering.
+The parent ```webfactory.shortcode.embed_esi_for_shortcode_handler``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html)
+(which may be nice for caching), while the parent ```webfactory.shortcode.embed_inline_for_shortcode_handler``` will use
+inline rendering.
 
 The ```reference-to-your-replacement-controller``` could be a string like ```AppBundle\Controller\EmbeddedImageController::showAction```
 or if you prefer controllers as a service, something like ```app.controller.embedded_image:showAction```. We recommend
