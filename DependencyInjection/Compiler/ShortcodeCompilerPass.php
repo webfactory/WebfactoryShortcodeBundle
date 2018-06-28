@@ -27,7 +27,7 @@ class ShortcodeCompilerPass implements CompilerPassInterface
         if ($container->has('webfactory.shortcode.guide.controller')) {
             $allShortcodeTags = [];
             foreach ($shortcodeServices as $id => $shortcodeTags) {
-                $allShortcodeTags += $shortcodeTags;
+                $allShortcodeTags = array_merge($allShortcodeTags, $shortcodeTags);
             }
 
             $container
