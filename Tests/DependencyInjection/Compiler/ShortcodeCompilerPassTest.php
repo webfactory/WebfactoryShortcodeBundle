@@ -5,8 +5,6 @@ namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\TaggedContainerInterface;
-use Thunder\Shortcode\ShortcodeFacade;
 use Webfactory\ShortcodeBundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 
 final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
