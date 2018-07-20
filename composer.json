@@ -8,7 +8,8 @@
         "symfony/dependency-injection": "^3.4.11",
         "symfony/http-kernel": "^3.4.11",
         "symfony/twig-bundle": "^3.4.11",
-        "thunderer/Shortcode": "^0.6.5"
+        "thunderer/Shortcode": "^0.6.5",
+        "psr/log": "^1.0.2"
     },
 
     "require-dev": {

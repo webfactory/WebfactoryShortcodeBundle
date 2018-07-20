@@ -270,7 +270,36 @@ final class ImageTest extends ShortcodeTest
     }
 }
 ```
- 
+
+
+## Logging
+
+When something goes wrong with the resolving of a shortcode, maybe you not only want to know which shortcode with
+which parameters caused the issue (which you can log in your resolving controller), but also which url was called
+that embedded the shortcode.
+
+This is tricky is you embed your shortcode controllers via ESI, as the ESI subrequest is in Symfony terms a master
+request, preventing you from getting your answer from RequestStack::getMasterRequest(). Hence, the
+`EmbedShortcodeHandler` logs with the default monolog handler which controller it will call to resolve the shortcode.
+You can overwrite the `EmbedShortcodeHandler`'s logger, e.g. if you want to change the channel, in the service
+definition of your shortcode:
+
+```xml
+<!-- src/AppBundle/Resources/config/shortcodes.xml -->
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+            <argument index="1">app.controller.embedded_image:showAction</argument>
+            <tag name="webfactory.shortcode" ... />
+            ...
+            
+            <argument index="3" type="service" id="monolog.logger.your_channel" />
+        </service>
+    </services>
+</container>
+```
+
 
 ## Credits, Copyright and License
 
