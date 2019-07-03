@@ -21,8 +21,8 @@
             <argument type="service" id="fragment.handler"/>
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>esi</argument>
-            <argument type="service" id="logger" on-invalid="null" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" on-invalid="null" />
         </service>
 
         <!-- Base definition for the EmbedForShortcodeHandler with inline renderer. -->
@@ -30,12 +30,12 @@
             <argument type="service" id="fragment.handler"/>
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>inline</argument>
-            <argument type="service" id="logger" on-invalid="null" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" on-invalid="null" />
         </service>
 
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the ShortcodeFacade. -->
-        <service class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
+        <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
             <argument type="service" id="webfactory.shortcode.facade"/>
             <tag name="twig.extension"/>
         </service>

@@ -50,7 +50,7 @@ final class RemoveWrappingParagraphElementsEventHandler
                     );
                 }
 
-                return $sourceTextBeforeShortcode . $r->getReplacement() . $sourceTextAfterShortcode;
+                return $sourceTextBeforeShortcode.$r->getReplacement().$sourceTextAfterShortcode;
             },
             $text
         );

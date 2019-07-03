@@ -33,28 +33,29 @@ class EmbeddedShortcodeHandler
 
     /**
      * @param FragmentHandler $fragmentHandler
-     * @param string $controllerName
-     * @param string $renderer
+     * @param string          $controllerName
+     * @param string          $renderer
      * @param LoggerInterface $logger
-     * @param RequestStack $requestStack
+     * @param RequestStack    $requestStack
      */
     public function __construct(
         FragmentHandler $fragmentHandler,
         $controllerName,
         $renderer,
-        LoggerInterface $logger = null,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        LoggerInterface $logger = null
     ) {
         $this->fragmentHandler = $fragmentHandler;
         $this->controllerName = $controllerName;
         $this->renderer = $renderer;
-        $this->logger = $logger ?: new NullLogger();
         $this->requestStack = $requestStack;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
      * @param ShortcodeInterface $shortcode
-     * @return null|string
+     *
+     * @return string|null
      */
     public function __invoke(ShortcodeInterface $shortcode)
     {

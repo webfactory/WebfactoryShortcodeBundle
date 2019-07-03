@@ -1,0 +1,6 @@
+framework:
+    secret: top-secret
+    test: true
+
+twig:
+    strict_variables: true
