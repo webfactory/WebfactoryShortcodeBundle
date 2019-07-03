@@ -3,100 +3,79 @@
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
 final class ShortcodeFacadeTest extends KernelTestCase
 {
-    /**
-     * @var array [
-     *     [
-     *         'controller' => 'app.controller.myFilter:myfilterPartialAction',
-     *         'renderer' => 'esi',
-     *         'name' => 'myShortcode',
-     *     ]
-     * ]
-     */
-    static protected $shortcodesToRegister = [];
+    private $fragmentHandler;
 
-    protected static function createKernel(array $options = array())
+    protected function setUp()
     {
-        return new TestKernel('test', true, static::$shortcodesToRegister);
-    }
-
-    /** @test */
-    public function shortcode_leads_to_rendering_of_controller_reference()
-    {
-        static::$shortcodesToRegister = [
-            [
-                'controller' => 'app.controller.myFilter:myfilterPartialAction',
-                'renderer' => 'esi',
-                'name' => 'myShortcode',
-            ]
-        ];
+        parent::setUp();
         static::bootKernel();
 
         // Replace fragment renderer in test kernel, as we only want to assert it is called with the correct parameters,
         // but not it's result.
         $container = static::$kernel->getContainer();
-        $fragmentHandler = $this->getMockBuilder(FragmentHandler::class)->disableOriginalConstructor()->getMock();
-        $fragmentHandler->expects($this->once())
+        $container->get('request_stack')->push(Request::create('/'));
+        $this->fragmentHandler = $this->getMockBuilder(FragmentHandler::class)->disableOriginalConstructor()->getMock();
+        $container->set('fragment.handler', $this->fragmentHandler);
+    }
+
+    /**
+     * @test
+     * @dataProvider shortcodeFixtures
+     */
+    public function processes_shortcodes(string $shortcode, ControllerReference $controllerReference, string $renderStrategy)
+    {
+        $this->fragmentHandler->expects($this->once())
             ->method('render')
-            ->with(new ControllerReference('app.controller.myFilter:myfilterPartialAction', ['id' => 42]), 'esi')
-            ->willReturn($mockedRenderResult = 'OK');
-        $container->set('fragment.handler', $fragmentHandler);
+            ->with($controllerReference, $renderStrategy)
+            ->willReturn('OK');
 
         $this->assertEquals(
-            $mockedRenderResult,
-            $this->renderTwigTemplate('{{ content |shortcodes }}', ['content' => '[myShortcode id=42]'])
-        );        
+            'OK',
+            $this->renderTwigTemplate('{{ content | shortcodes }}', ['content' => $shortcode])
+        );
+    }
+
+    public function shortcodeFixtures()
+    {
+        return [
+            ['[test-esi foo=bar]', new ControllerReference('test-esi-controller', ['foo' => 'bar']), 'esi'],
+            ['[test-inline bar=baz]', new ControllerReference('test-inline-controller', ['bar' => 'baz']), 'inline'],
+        ];
     }
 
     /** @test */
     public function paragraphs_wrapping_shortcodes_get_removed()
     {
-        static::$shortcodesToRegister = [
-            [
-                'controller' => 'app.controller.myFilter:myfilterPartialAction',
-                'renderer' => 'esi',
-                'name' => 'myShortcode',
-            ]
-        ];
-        static::bootKernel();
-
-        // Replace fragment renderer in test kernel, as we only want to assert it is called with the correct parameters,
-        // but not it's result.
-        $container = static::$kernel->getContainer();
-        $fragmentHandler = $this->getMockBuilder(FragmentHandler::class)->disableOriginalConstructor()->getMock();
-        $fragmentHandler->expects($this->once())
-            ->method('render')
-            ->with(new ControllerReference('app.controller.myFilter:myfilterPartialAction', ['id' => 42]), 'esi')
-            ->willReturn($mockedRenderResult = 'OK');
-        $container->set('fragment.handler', $fragmentHandler);
+        $this->fragmentHandler->method('render')->willReturn('RESULT');
 
         $this->assertEquals(
-            $mockedRenderResult,
-            $this->renderTwigTemplate('{{ content |shortcodes }}', ['content' => '<p> [myShortcode id=42] </p>'])
+            'RESULT',
+            $this->renderTwigTemplate("{{ '<p>[test-inline]</p>' | shortcodes }}")
         );
     }
 
     /** @test */
     public function content_without_shortcodes_wont_be_changed()
     {
-        static::bootKernel();
-
         $this->assertEquals(
             '<p>Content without shortcode</p>',
-            $this->renderTwigTemplate('{{ \'<p>Content without shortcode</p>\' | shortcodes }}', [])
+            $this->renderTwigTemplate("{{ '<p>Content without shortcode</p>' | shortcodes }}")
         );
     }
 
     /**
      * @param string $templateCode
-     * @param array $context
+     * @param array  $context
+     *
      * @return string
      */
-    protected function renderTwigTemplate($templateCode, array $context)
+    private function renderTwigTemplate($templateCode, array $context = [])
     {
         /** @var $container ContainerInterface */
         $container = static::$kernel->getContainer();

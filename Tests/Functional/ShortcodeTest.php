@@ -19,15 +19,16 @@ abstract class ShortcodeTest extends WebTestCase
     {
         parent::setUp();
 
-        if ($this->getShortcodeToTest() === '' || $this->getShortcodeToTest() === null) {
+        if ('' === $this->getShortcodeToTest() || null === $this->getShortcodeToTest()) {
             throw new \PHPUnit_Framework_IncompleteTestError(
-                'Albeit being a ' . __CLASS__ . ', ' . get_called_class() . ' does not define a shortcode to test.'
+                'Albeit being a '.__CLASS__.', '.\get_called_class().' does not define a shortcode to test.'
             );
         }
     }
 
     /**
      * @param string|null $customParameters
+     *
      * @return Crawler
      */
     protected function crawlRenderedExample($customParameters = null)
@@ -39,9 +40,9 @@ abstract class ShortcodeTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $crawlerOnRenderedExample = $crawlerOnRenderedExamplePage->filter('#rendered-example');
-        if ($crawlerOnRenderedExample->count() === 0) {
+        if (0 === $crawlerOnRenderedExample->count()) {
             throw new \PHPUnit_Framework_ExpectationFailedException(
-                'No rendered example found for shortcode "' . $this->shortcode . '"'
+                'No rendered example found for shortcode "'.$this->shortcode.'"'
             );
         }
 
@@ -49,8 +50,9 @@ abstract class ShortcodeTest extends WebTestCase
     }
 
     /**
-     * @param int $expectedStatusCode
+     * @param int         $expectedStatusCode
      * @param string|null $customParameters
+     *
      * @return Crawler
      */
     protected function assertHttpStatusCodeWhenCrawlingRenderedExample($expectedStatusCode, $customParameters = null)
@@ -64,6 +66,7 @@ abstract class ShortcodeTest extends WebTestCase
 
     /**
      * @param string|null $customParameters
+     *
      * @return string
      */
     protected function getUrlWithRenderedExample($customParameters = null)

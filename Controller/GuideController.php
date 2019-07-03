@@ -2,10 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -15,7 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class GuideController
 {
     /**
-     * @var array [
+     * @var array
+     *
+     * Example structure: [
      *     [
      *         'shortcode' => 'img'
      *         'example' (optional key) => '[img src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]'
@@ -32,17 +31,19 @@ final class GuideController
 
     /**
      * @Template()
+     *
      * @return array
      */
     public function listAction()
     {
         return [
-            'shortcodeTags' => $this->shortcodeTags
+            'shortcodeTags' => $this->shortcodeTags,
         ];
     }
 
     /**
      * @Template()
+     *
      * @return array
      */
     public function detailAction($shortcode, Request $request)
@@ -52,7 +53,7 @@ final class GuideController
                 // if custom parameters are provided, replace the example
                 $customParameters = $request->get('customParameters');
                 if ($customParameters) {
-                    $shortcodeTag['example'] = $shortcode . ' ' . $customParameters;
+                    $shortcodeTag['example'] = $shortcode.' '.$customParameters;
                 }
 
                 return [

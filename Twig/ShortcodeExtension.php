@@ -3,11 +3,13 @@
 namespace Webfactory\ShortcodeBundle\Twig;
 
 use Thunder\Shortcode\ShortcodeFacade;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Twig extension activating the |shortcodes filter.
  */
-final class ShortcodeExtension extends \Twig_Extension
+final class ShortcodeExtension extends AbstractExtension
 {
     /** @var ShortcodeFacade */
     private $facade;
@@ -23,12 +25,13 @@ final class ShortcodeExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('shortcodes', [$this, 'processShortcodes'], ['is_safe' => ['html']]),
+            new TwigFilter('shortcodes', [$this, 'processShortcodes'], ['is_safe' => ['html']]),
         ];
     }
 
     /**
      * @param string $content
+     *
      * @return string
      */
     public function processShortcodes($content)

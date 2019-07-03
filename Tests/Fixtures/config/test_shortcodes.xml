@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <!-- Two shortcode handlers defined for tests -->
+
+        <service id="test_esi" parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+            <argument index="1">test-esi-controller</argument>
+            <argument index="4">null</argument><!-- Logger -->
+            <tag name="webfactory.shortcode" shortcode="test-esi"/>
+        </service>
+
+        <service id="test_inline" parent="webfactory.shortcode.embed_inline_for_shortcode_handler">
+            <argument index="1">test-inline-controller</argument>
+            <argument index="4">null</argument><!-- Logger -->
+            <tag name="webfactory.shortcode" shortcode="test-inline"/>
+        </service>
+
+    </services>
+</container>

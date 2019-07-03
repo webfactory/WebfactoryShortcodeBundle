@@ -2,12 +2,13 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Webfactory\ShortcodeBundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 
-final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
+final class ShortcodeCompilerPassTest extends TestCase
 {
     /**
      * System under test.
@@ -34,24 +35,24 @@ final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->method('findTaggedServiceIds')
             ->willReturn([
                 'service_id1' => [
-                    ['shortcode' => 'shortcode1']
+                    ['shortcode' => 'shortcode1'],
                 ],
                 'service_id2' => [
-                    ['shortcode' => 'shortcode2']
-                ]
+                    ['shortcode' => 'shortcode2'],
+                ],
             ]);
 
-        $mockedShortcodeFacade = $this->getMock(Definition::class);
+        $mockedShortcodeFacade = $this->createMock(Definition::class);
         $mockedShortcodeFacade->expects($this->at(0))
             ->method('addMethodCall')
             ->with('addHandler', $this->callback(function (array $argument) {
-                return $argument[0] === 'shortcode1'
+                return 'shortcode1' === $argument[0]
                     && $argument[1] instanceof Reference;
             }));
         $mockedShortcodeFacade->expects($this->at(1))
             ->method('addMethodCall')
             ->with('addHandler', $this->callback(function ($argument) {
-                return $argument[0] === 'shortcode2'
+                return 'shortcode2' === $argument[0]
                     && $argument[1] instanceof Reference;
             }));
 
@@ -70,9 +71,9 @@ final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->method('findTaggedServiceIds')
             ->willReturn([]);
 
-        $this->setExpectedException(null);
-
         $this->compilerPass->process($this->containerBuilder);
+
+        $this->assertTrue(true);
     }
 
     /** @test */
@@ -82,31 +83,31 @@ final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->method('findTaggedServiceIds')
             ->willReturn([
                 'service_id1' => [
-                    ['shortcode' => 'shortcode1']
+                    ['shortcode' => 'shortcode1'],
                 ],
                 'service_id2' => [
-                    ['shortcode' => 'shortcode2']
-                ]
+                    ['shortcode' => 'shortcode2'],
+                ],
             ]);
 
         $this->containerBuilder->expects($this->once())
             ->method('findDefinition')
             ->with('webfactory.shortcode.facade')
-            ->willReturn($this->getMock(Definition::class));
+            ->willReturn($this->createMock(Definition::class));
 
         $this->containerBuilder->expects($this->once())
             ->method('has')
             ->with('webfactory.shortcode.guide.controller')
             ->willReturn(true);
 
-        $mockedShortcodeGuideServiceDefinition = $this->getMock(Definition::class);
+        $mockedShortcodeGuideServiceDefinition = $this->createMock(Definition::class);
         $mockedShortcodeGuideServiceDefinition->expects($this->once())
             ->method('setArgument')
             ->with(
                 0,
                 [
                     ['shortcode' => 'shortcode1'],
-                    ['shortcode' => 'shortcode2']
+                    ['shortcode' => 'shortcode2'],
                 ]
             );
 
@@ -130,8 +131,8 @@ final class ShortcodeCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->with('webfactory.shortcode.guide.controller')
             ->willReturn(false);
 
-        $this->setExpectedException(null);
-
         $this->compilerPass->process($this->containerBuilder);
+
+        $this->assertTrue(true);
     }
 }
