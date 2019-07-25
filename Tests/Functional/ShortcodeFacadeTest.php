@@ -11,6 +11,11 @@ final class ShortcodeFacadeTest extends KernelTestCase
 {
     private $fragmentHandler;
 
+    protected static function getKernelClass()
+    {
+        return 'Webfactory\ShortcodeBundle\Tests\Fixtures\TestKernel';
+    }
+
     protected function setUp()
     {
         parent::setUp();
