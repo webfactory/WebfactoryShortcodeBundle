@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * CompilerPass that prepares the shortcode facade and the GuideController (if configured).
+ * CompilerPass that prepares the shortcode handler container and the GuideController (if configured).
  */
 class ShortcodeCompilerPass implements CompilerPassInterface
 {
@@ -15,11 +15,11 @@ class ShortcodeCompilerPass implements CompilerPassInterface
     {
         $shortcodeServices = $container->findTaggedServiceIds('webfactory.shortcode');
 
-        // add services tagged with webfactory.shortcode.facade as handlers to the short code facade
-        $serviceDefinition = $container->findDefinition('webfactory.shortcode.facade');
+        // add services tagged with webfactory.shortcode as handlers to the short code handler container
+        $handlerContainer = $container->findDefinition('webfactory.shortcode.handler_container');
         foreach ($shortcodeServices as $id => $shortcodeTags) {
             foreach ($shortcodeTags as $shortcodeTag) {
-                $serviceDefinition->addMethodCall('addHandler', [$shortcodeTag['shortcode'], new Reference($id)]);
+                $handlerContainer->addMethodCall('add', [$shortcodeTag['shortcode'], new Reference($id)]);
             }
         }
 

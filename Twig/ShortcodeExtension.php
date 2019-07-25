@@ -2,7 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Twig;
 
-use Thunder\Shortcode\ShortcodeFacade;
+use Thunder\Shortcode\Processor\Processor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -11,15 +11,15 @@ use Twig\TwigFilter;
  */
 final class ShortcodeExtension extends AbstractExtension
 {
-    /** @var ShortcodeFacade */
-    private $facade;
+    /** @var Processor */
+    private $processor;
 
     /**
-     * @param ShortcodeFacade $facade
+     * @param Processor $processor
      */
-    public function __construct(ShortcodeFacade $facade)
+    public function __construct(Processor $processor)
     {
-        $this->facade = $facade;
+        $this->processor = $processor;
     }
 
     public function getFilters()
@@ -36,6 +36,6 @@ final class ShortcodeExtension extends AbstractExtension
      */
     public function processShortcodes($content)
     {
-        return $this->facade->process($content);
+        return $this->processor->process($content);
     }
 }
