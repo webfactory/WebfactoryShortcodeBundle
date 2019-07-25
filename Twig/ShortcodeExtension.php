@@ -19,7 +19,7 @@ final class ShortcodeExtension extends AbstractExtension
      */
     public function __construct(Processor $processor)
     {
-        $this->processor = $processor;
+        $this->processor = $processor->withMaxIterations(null);
     }
 
     public function getFilters()
