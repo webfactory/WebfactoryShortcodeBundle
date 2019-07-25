@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Twig;
 
+use Thunder\Shortcode\EventContainer\EventContainer;
 use Thunder\Shortcode\Processor\Processor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -17,9 +18,9 @@ final class ShortcodeExtension extends AbstractExtension
     /**
      * @param Processor $processor
      */
-    public function __construct(Processor $processor)
+    public function __construct(Processor $processor, EventContainer $eventContainer)
     {
-        $this->processor = $processor->withMaxIterations(null);
+        $this->processor = $processor->withMaxIterations(null)->withEventContainer($eventContainer);
     }
 
     public function getFilters()

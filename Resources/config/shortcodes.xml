@@ -7,13 +7,6 @@
 
         <!-- Definition of a Shortcode HandlerContainer instance. -->
         <service id="webfactory.shortcode.handler_container" class="Thunder\Shortcode\HandlerContainer\HandlerContainer">
-            <!-- Event handler that removes <p>...</p> tag that directly wrap shortcodes. -->
-            <call method="add">
-                <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
-                <argument type="service">
-                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
-                </argument>
-            </call>
         </service>
 
         <!-- Definition of a Shortcode RegularParser instance. -->
@@ -24,6 +17,17 @@
         <service id="webfactory.shortcode.processor" class="Thunder\Shortcode\Processor\Processor">
             <argument type="service" id="webfactory.shortcode.regular_parser" />
             <argument type="service" id="webfactory.shortcode.handler_container" />
+        </service>
+
+        <!-- Definition of a Shortcode EventContainer instance. -->
+        <service id="webfactory.shortcode.event_container" class="Thunder\Shortcode\EventContainer\EventContainer">
+            <!-- Event handler that removes <p>...</p> tag that directly wrap shortcodes. -->
+            <call method="addListener">
+                <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
+                <argument type="service">
+                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
+                </argument>
+            </call>
         </service>
 
         <!-- Base definition for the EmbedForShortcodeHandler with esi renderer. -->
@@ -47,6 +51,7 @@
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
             <argument type="service" id="webfactory.shortcode.processor"/>
+            <argument type="service" id="webfactory.shortcode.event_container"/>
             <tag name="twig.extension"/>
         </service>
 
