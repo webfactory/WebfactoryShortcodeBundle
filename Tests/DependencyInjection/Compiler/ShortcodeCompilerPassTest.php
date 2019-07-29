@@ -64,7 +64,9 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function no_tagged_services_do_no_harm()
     {
         $this->containerBuilder->expects($this->once())
@@ -72,8 +74,6 @@ final class ShortcodeCompilerPassTest extends TestCase
             ->willReturn([]);
 
         $this->compilerPass->process($this->containerBuilder);
-
-        $this->assertTrue(true);
     }
 
     /** @test */
@@ -119,7 +119,9 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function missing_shortcode_guide_service_does_no_harm()
     {
         $this->containerBuilder->expects($this->once())
@@ -132,7 +134,5 @@ final class ShortcodeCompilerPassTest extends TestCase
             ->willReturn(false);
 
         $this->compilerPass->process($this->containerBuilder);
-
-        $this->assertTrue(true);
     }
 }
