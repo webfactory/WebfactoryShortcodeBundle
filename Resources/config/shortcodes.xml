@@ -5,10 +5,24 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <!-- Definition of a ShortcodeFacade instance. -->
-        <service id="webfactory.shortcode.facade" class="Thunder\Shortcode\ShortcodeFacade">
+        <!-- Definition of a Shortcode HandlerContainer instance. -->
+        <service id="webfactory.shortcode.handler_container" class="Thunder\Shortcode\HandlerContainer\HandlerContainer">
+        </service>
+
+        <!-- Definition of a Shortcode RegularParser instance. -->
+        <service id="webfactory.shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser">
+        </service>
+
+        <!-- Definition of a Shortcode Processor instance. -->
+        <service id="webfactory.shortcode.processor" class="Thunder\Shortcode\Processor\Processor">
+            <argument type="service" id="webfactory.shortcode.regular_parser" />
+            <argument type="service" id="webfactory.shortcode.handler_container" />
+        </service>
+
+        <!-- Definition of a Shortcode EventContainer instance. -->
+        <service id="webfactory.shortcode.event_container" class="Thunder\Shortcode\EventContainer\EventContainer">
             <!-- Event handler that removes <p>...</p> tag that directly wrap shortcodes. -->
-            <call method="addEventHandler">
+            <call method="addListener">
                 <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
                 <argument type="service">
                     <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
@@ -34,9 +48,10 @@
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
-        <!-- Twig extension providing the |shortcodes filter. The content will be passed to the ShortcodeFacade. -->
+        <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
-            <argument type="service" id="webfactory.shortcode.facade"/>
+            <argument type="service" id="webfactory.shortcode.processor"/>
+            <argument type="service" id="webfactory.shortcode.event_container"/>
             <tag name="twig.extension"/>
         </service>
 
