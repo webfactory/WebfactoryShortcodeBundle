@@ -29,7 +29,7 @@ final class ShortcodeCompilerPassTest extends TestCase
     }
 
     /** @test */
-    public function tagged_services_are_added_as_handlers_to_facade()
+    public function tagged_services_are_added_as_handlers_to_handler_container()
     {
         $this->containerBuilder->expects($this->once())
             ->method('findTaggedServiceIds')
@@ -42,24 +42,24 @@ final class ShortcodeCompilerPassTest extends TestCase
                 ],
             ]);
 
-        $mockedShortcodeFacade = $this->createMock(Definition::class);
-        $mockedShortcodeFacade->expects($this->at(0))
+        $mockedShortcodeHandlerContainer = $this->createMock(Definition::class);
+        $mockedShortcodeHandlerContainer->expects($this->at(0))
             ->method('addMethodCall')
-            ->with('addHandler', $this->callback(function (array $argument) {
+            ->with('add', $this->callback(function (array $argument) {
                 return 'shortcode1' === $argument[0]
                     && $argument[1] instanceof Reference;
             }));
-        $mockedShortcodeFacade->expects($this->at(1))
+        $mockedShortcodeHandlerContainer->expects($this->at(1))
             ->method('addMethodCall')
-            ->with('addHandler', $this->callback(function ($argument) {
+            ->with('add', $this->callback(function ($argument) {
                 return 'shortcode2' === $argument[0]
                     && $argument[1] instanceof Reference;
             }));
 
         $this->containerBuilder->expects($this->once())
             ->method('findDefinition')
-            ->with('webfactory.shortcode.facade')
-            ->willReturn($mockedShortcodeFacade);
+            ->with('webfactory.shortcode.handler_container')
+            ->willReturn($mockedShortcodeHandlerContainer);
 
         $this->compilerPass->process($this->containerBuilder);
     }
@@ -92,7 +92,7 @@ final class ShortcodeCompilerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('findDefinition')
-            ->with('webfactory.shortcode.facade')
+            ->with('webfactory.shortcode.handler_container')
             ->willReturn($this->createMock(Definition::class));
 
         $this->containerBuilder->expects($this->once())
