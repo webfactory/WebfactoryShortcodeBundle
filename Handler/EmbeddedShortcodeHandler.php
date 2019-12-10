@@ -71,7 +71,10 @@ class EmbeddedShortcodeHandler
         );
 
         return $this->fragmentHandler->render(
-            new ControllerReference($this->controllerName, $shortcode->getParameters()),
+            new ControllerReference(
+                $this->controllerName,
+                array_merge(['request' => $this->requestStack->getCurrentRequest()], $shortcode->getParameters())
+            ),
             $this->renderer
         );
     }
