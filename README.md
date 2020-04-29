@@ -67,14 +67,14 @@ public function registerBundles()
 The easiest way is to add one anonymous service for each shortcode in your services definition:
 
 ```xml  
-<service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+<service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
     <argument index="1">reference-to-your-replacement-controller</argument>
     <tag name="webfactory.shortcode" shortcode="your-shortcode-name"/>
 </service>
 ```
 
-The parent ```webfactory.shortcode.embed_esi_for_shortcode_handler``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html)
-(which may be nice for caching), while the parent ```webfactory.shortcode.embed_inline_for_shortcode_handler``` will use
+The parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html)
+(which may be nice for caching), while the parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline``` will use
 inline rendering.
 
 The ```reference-to-your-replacement-controller``` could be a string like ```AppBundle\Controller\EmbeddedImageController::showAction```
@@ -106,7 +106,7 @@ Then, write a service definition like this:
     
         <!-- ... -->
         
-        <service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag name="webfactory.shortcode" shortcode="image"/>
         </service>
@@ -207,7 +207,7 @@ Finally, enrich your shortcode tags with description and example attributes for 
     <!-- import guide.xml -->
 
     <services>
-        <service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag
                 name="webfactory.shortcode"
@@ -289,7 +289,7 @@ definition of your shortcode:
 <?xml version="1.0" ?>
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service parent="webfactory.shortcode.embed_esi_for_shortcode_handler">
+        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag name="webfactory.shortcode" ... />
             ...

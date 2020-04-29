@@ -5,6 +5,8 @@ namespace Webfactory\ShortcodeBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Thunder\Shortcode\HandlerContainer\HandlerContainer;
+use Webfactory\ShortcodeBundle\Controller\GuideController;
 
 /**
  * CompilerPass that prepares the shortcode handler container and the GuideController (if configured).
@@ -16,7 +18,7 @@ class ShortcodeCompilerPass implements CompilerPassInterface
         $shortcodeServices = $container->findTaggedServiceIds('webfactory.shortcode');
 
         // add services tagged with webfactory.shortcode as handlers to the short code handler container
-        $handlerContainer = $container->findDefinition('webfactory.shortcode.handler_container');
+        $handlerContainer = $container->findDefinition(HandlerContainer::class);
         foreach ($shortcodeServices as $id => $shortcodeTags) {
             foreach ($shortcodeTags as $shortcodeTag) {
                 $handlerContainer->addMethodCall('add', [$shortcodeTag['shortcode'], new Reference($id)]);
@@ -24,14 +26,14 @@ class ShortcodeCompilerPass implements CompilerPassInterface
         }
 
         // prepare the GuideController if it's configuration is imported
-        if ($container->has('webfactory.shortcode.guide.controller')) {
+        if ($container->has(GuideController::class)) {
             $allShortcodeTags = [];
             foreach ($shortcodeServices as $id => $shortcodeTags) {
                 $allShortcodeTags = array_merge($allShortcodeTags, $shortcodeTags);
             }
 
             $container
-                ->getDefinition('webfactory.shortcode.guide.controller')
+                ->getDefinition(GuideController::class)
                 ->setArgument(0, $allShortcodeTags);
         }
     }

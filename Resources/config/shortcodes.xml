@@ -6,21 +6,19 @@
     <services>
 
         <!-- Definition of a Shortcode HandlerContainer instance. -->
-        <service id="webfactory.shortcode.handler_container" class="Thunder\Shortcode\HandlerContainer\HandlerContainer">
-        </service>
+        <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
 
         <!-- Definition of a Shortcode RegularParser instance. -->
-        <service id="webfactory.shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser">
-        </service>
+        <service id="Thunder\Shortcode\Parser\RegularParser"/>
 
         <!-- Definition of a Shortcode Processor instance. -->
-        <service id="webfactory.shortcode.processor" class="Thunder\Shortcode\Processor\Processor">
-            <argument type="service" id="webfactory.shortcode.regular_parser" />
-            <argument type="service" id="webfactory.shortcode.handler_container" />
+        <service id="Thunder\Shortcode\Processor\Processor">
+            <argument type="service" id="Thunder\Shortcode\Parser\RegularParser" />
+            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
         </service>
 
         <!-- Definition of a Shortcode EventContainer instance. -->
-        <service id="webfactory.shortcode.event_container" class="Thunder\Shortcode\EventContainer\EventContainer">
+        <service id="Thunder\Shortcode\EventContainer\EventContainer">
             <!-- Event handler that removes <p>...</p> tag that directly wrap shortcodes. -->
             <call method="addListener">
                 <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
@@ -31,7 +29,7 @@
         </service>
 
         <!-- Base definition for the EmbedForShortcodeHandler with esi renderer. -->
-        <service abstract="true" id="webfactory.shortcode.embed_esi_for_shortcode_handler" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
+        <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
             <argument type="service" id="fragment.handler"/>
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>esi</argument>
@@ -39,8 +37,11 @@
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
+        <!-- alias for BC -->
+        <service id="webfactory.shortcode.embed_esi_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi"/>
+
         <!-- Base definition for the EmbedForShortcodeHandler with inline renderer. -->
-        <service abstract="true" id="webfactory.shortcode.embed_inline_for_shortcode_handler" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
+        <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
             <argument type="service" id="fragment.handler"/>
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>inline</argument>
@@ -48,10 +49,13 @@
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
+        <!-- alias for BC -->
+        <service id="webfactory.shortcode.embed_inline_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline"/>
+
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
-            <argument type="service" id="webfactory.shortcode.processor"/>
-            <argument type="service" id="webfactory.shortcode.event_container"/>
+            <argument type="service" id="Thunder\Shortcode\Processor\Processor"/>
+            <argument type="service" id="Thunder\Shortcode\EventContainer\EventContainer"/>
             <tag name="twig.extension"/>
         </service>
 

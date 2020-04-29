@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Thunder\Shortcode\HandlerContainer\HandlerContainer;
+use Webfactory\ShortcodeBundle\Controller\GuideController;
 use Webfactory\ShortcodeBundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 
 final class ShortcodeCompilerPassTest extends TestCase
@@ -58,7 +60,7 @@ final class ShortcodeCompilerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('findDefinition')
-            ->with('webfactory.shortcode.handler_container')
+            ->with(HandlerContainer::class)
             ->willReturn($mockedShortcodeHandlerContainer);
 
         $this->compilerPass->process($this->containerBuilder);
@@ -92,12 +94,12 @@ final class ShortcodeCompilerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('findDefinition')
-            ->with('webfactory.shortcode.handler_container')
+            ->with(HandlerContainer::class)
             ->willReturn($this->createMock(Definition::class));
 
         $this->containerBuilder->expects($this->once())
             ->method('has')
-            ->with('webfactory.shortcode.guide.controller')
+            ->with(GuideController::class)
             ->willReturn(true);
 
         $mockedShortcodeGuideServiceDefinition = $this->createMock(Definition::class);
@@ -113,7 +115,7 @@ final class ShortcodeCompilerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('getDefinition')
-            ->with('webfactory.shortcode.guide.controller')
+            ->with(GuideController::class)
             ->willReturn($mockedShortcodeGuideServiceDefinition);
 
         $this->compilerPass->process($this->containerBuilder);
@@ -130,7 +132,7 @@ final class ShortcodeCompilerPassTest extends TestCase
 
         $this->containerBuilder->expects($this->once())
             ->method('has')
-            ->with('webfactory.shortcode.guide.controller')
+            ->with(GuideController::class)
             ->willReturn(false);
 
         $this->compilerPass->process($this->containerBuilder);

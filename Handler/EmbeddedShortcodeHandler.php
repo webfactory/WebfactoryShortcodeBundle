@@ -87,8 +87,9 @@ class EmbeddedShortcodeHandler
                     .'attributes. This can happen e.g. when using Param Converters for your original controller '
                     .'action, as the request (containing the conversion result) is automatically passed to the call of '
                     .'the shortcode controller to allow context sensitive shortcodes. You could use '
-                    .'webfactory.shortcode.embed_inline_for_shortcode_handler as parent in your shortcode\'s service '
-                    .'defintion, so that the inline instead of ESI rendering strategy will be used.',
+                    .'Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline as parent in your '
+                    .'shortcode\'s service defintion, so that the inline instead of ESI rendering strategy will be '
+                    .'used.',
                     0,
                     $exception
                 );
