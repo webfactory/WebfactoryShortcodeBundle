@@ -13,9 +13,9 @@ abstract class ShortcodeTest extends WebTestCase
     /**
      * @return string name of the shortcode to test.
      */
-    abstract protected function getShortcodeToTest();
+    abstract protected function getShortcodeToTest(): string;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,12 +26,7 @@ abstract class ShortcodeTest extends WebTestCase
         }
     }
 
-    /**
-     * @param string|null $customParameters
-     *
-     * @return Crawler
-     */
-    protected function crawlRenderedExample($customParameters = null)
+    protected function crawlRenderedExample(string $customParameters = null): Crawler
     {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
@@ -49,13 +44,7 @@ abstract class ShortcodeTest extends WebTestCase
         return $crawlerOnRenderedExample;
     }
 
-    /**
-     * @param int         $expectedStatusCode
-     * @param string|null $customParameters
-     *
-     * @return Crawler
-     */
-    protected function assertHttpStatusCodeWhenCrawlingRenderedExample($expectedStatusCode, $customParameters = null)
+    protected function assertHttpStatusCodeWhenCrawlingRenderedExample(int $expectedStatusCode, string $customParameters = null): Crawler
     {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
@@ -64,12 +53,7 @@ abstract class ShortcodeTest extends WebTestCase
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @param string|null $customParameters
-     *
-     * @return string
-     */
-    protected function getUrlWithRenderedExample($customParameters = null)
+    protected function getUrlWithRenderedExample(string $customParameters = null): string
     {
         static::bootKernel();
 

@@ -22,7 +22,7 @@ final class ShortcodeCompilerPassTest extends TestCase
     /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject */
     private $containerBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->compilerPass = new ShortcodeCompilerPass();
         $this->containerBuilder = $this->getMockBuilder(ContainerBuilder::class)
@@ -31,7 +31,7 @@ final class ShortcodeCompilerPassTest extends TestCase
     }
 
     /** @test */
-    public function tagged_services_are_added_as_handlers_to_handler_container()
+    public function tagged_services_are_added_as_handlers_to_handler_container(): void
     {
         $this->containerBuilder->expects($this->once())
             ->method('findTaggedServiceIds')
@@ -66,10 +66,8 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function no_tagged_services_do_no_harm()
+    /** @test */
+    public function no_tagged_services_do_no_harm(): void
     {
         $this->containerBuilder->expects($this->once())
             ->method('findTaggedServiceIds')
@@ -79,7 +77,7 @@ final class ShortcodeCompilerPassTest extends TestCase
     }
 
     /** @test */
-    public function shortcode_guide_service_gets_configured_if_set()
+    public function shortcode_guide_service_gets_configured_if_set(): void
     {
         $this->containerBuilder->expects($this->once())
             ->method('findTaggedServiceIds')
@@ -121,10 +119,8 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function missing_shortcode_guide_service_does_no_harm()
+    /** @test */
+    public function missing_shortcode_guide_service_does_no_harm(): void
     {
         $this->containerBuilder->expects($this->once())
             ->method('findTaggedServiceIds')

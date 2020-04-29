@@ -4,6 +4,7 @@ namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
@@ -11,12 +12,12 @@ final class ShortcodeFacadeTest extends KernelTestCase
 {
     private $fragmentHandler;
 
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
         return 'Webfactory\ShortcodeBundle\Tests\Fixtures\TestKernel';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         static::bootKernel();
@@ -46,7 +47,7 @@ final class ShortcodeFacadeTest extends KernelTestCase
         );
     }
 
-    public function shortcodeFixtures()
+    public function shortcodeFixtures(): array
     {
         return [
             ['[test-esi foo=bar]', new ControllerReference('test-esi-controller', ['foo' => 'bar']), 'esi'],
@@ -55,7 +56,7 @@ final class ShortcodeFacadeTest extends KernelTestCase
     }
 
     /** @test */
-    public function paragraphs_wrapping_shortcodes_get_removed()
+    public function paragraphs_wrapping_shortcodes_get_removed(): void
     {
         $this->fragmentHandler->method('render')->willReturn('RESULT');
 
@@ -66,7 +67,7 @@ final class ShortcodeFacadeTest extends KernelTestCase
     }
 
     /** @test */
-    public function content_without_shortcodes_wont_be_changed()
+    public function content_without_shortcodes_wont_be_changed(): void
     {
         $this->assertEquals(
             '<p>Content without shortcode</p>',
@@ -74,13 +75,7 @@ final class ShortcodeFacadeTest extends KernelTestCase
         );
     }
 
-    /**
-     * @param string $templateCode
-     * @param array  $context
-     *
-     * @return string
-     */
-    private function renderTwigTemplate($templateCode, array $context = [])
+    private function renderTwigTemplate(string $templateCode, array $context = []): string
     {
         /** @var $container ContainerInterface */
         $container = static::$kernel->getContainer();

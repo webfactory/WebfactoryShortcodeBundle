@@ -20,11 +20,9 @@ final class TestKernel extends Kernel
     use MicroKernelTrait;
 
     /**
-     * Returns an array of bundles to register.
-     *
      * @return BundleInterface[] An array of bundle instances
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [
             new FrameworkBundle(),
@@ -33,29 +31,19 @@ final class TestKernel extends Kernel
         ];
     }
 
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/config/config.yml');
         $loader->load(__DIR__.'/config/test_shortcodes.xml');
         $container->addCompilerPass(new PublicFragmentHandlerClass());
     }
 
-    /**
-     * Gets the cache directory.
-     *
-     * @return string The cache directory
-     */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__.'/cache/'.$this->environment;
     }
 
-    /**
-     * Gets the log directory.
-     *
-     * @return string The log directory
-     */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return __DIR__.'/logs';
     }
@@ -68,7 +56,7 @@ final class TestKernel extends Kernel
      *
      * @param RouteCollectionBuilder $routes
      */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
     }
 }
