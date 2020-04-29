@@ -7,6 +7,7 @@
 
         <service id="Webfactory\ShortcodeBundle\Controller\GuideController">
             <argument><!-- shortcode description placeholder argument --></argument>
+            <tag name="controller.service_arguments"/>
         </service>
 
     </services>
