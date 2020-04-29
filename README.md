@@ -67,7 +67,7 @@ public function registerBundles()
 The easiest way is to add one anonymous service for each shortcode in your services definition:
 
 ```xml  
-<service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
+<service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
     <argument index="1">reference-to-your-replacement-controller</argument>
     <tag name="webfactory.shortcode" shortcode="your-shortcode-name"/>
 </service>
@@ -106,7 +106,7 @@ Then, write a service definition like this:
     
         <!-- ... -->
         
-        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag name="webfactory.shortcode" shortcode="image"/>
         </service>
@@ -192,7 +192,7 @@ considering the environment. Maybe you want to restrict access in your security 
 
 ```yaml
 # src/routing.yml
-shortcode-guide:
+_shortcode-guide:
     prefix: /shortcodes
     resource: "@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml"
 ```
@@ -207,7 +207,7 @@ Finally, enrich your shortcode tags with description and example attributes for 
     <!-- import guide.xml -->
 
     <services>
-        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag
                 name="webfactory.shortcode"
@@ -244,13 +244,13 @@ use Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest;
 
 final class ImageTest extends ShortcodeTest
 {
-    protected function getShortcodeToTest()
+    protected function getShortcodeToTest(): string
     {
         return 'image';
     }
 
     /** @test */
-    public function teaser_gets_rendered()
+    public function teaser_gets_rendered(): void
     {
         // without $customParameters, crawlRenderedExample() will crawl a page rendering the example configured in the
         // shortcode tag, in this case "image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"  
@@ -261,7 +261,7 @@ final class ImageTest extends ShortcodeTest
     }
 
     /** @test */
-    public function teaser_to_nonexisting_page_gives_error()
+    public function teaser_to_nonexisting_page_gives_error(): void
     {
         // both crawlRenderedExample() and assertHttpStatusCodeWhenCrawlingRenderedExample() accept a $customParameters
         // argument that will replace the parameters provided in the configuration of the shortcode tag.
@@ -289,7 +289,7 @@ definition of your shortcode:
 <?xml version="1.0" ?>
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
+        <service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
             <argument index="1">app.controller.embedded_image:showAction</argument>
             <tag name="webfactory.shortcode" ... />
             ...
