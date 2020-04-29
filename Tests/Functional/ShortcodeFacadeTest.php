@@ -34,12 +34,26 @@ final class ShortcodeFacadeTest extends KernelTestCase
      * @test
      * @dataProvider shortcodeFixtures
      */
-    public function processes_shortcodes(string $shortcode, ControllerReference $controllerReference, string $renderStrategy)
-    {
+    public function processes_shortcodes(
+        string $shortcode,
+        ControllerReference $expectedControllerReference,
+        string $expectedRenderStrategy
+    ): void {
         $this->fragmentHandler->expects($this->once())
             ->method('render')
-            ->with($controllerReference, $renderStrategy)
-            ->willReturn('OK');
+            ->willReturnCallback(
+                function (
+                    ControllerReference $actualControllerReference,
+                    string $actualRenderStrategy
+                ) use (
+                    $expectedControllerReference,
+                    $expectedRenderStrategy
+                ) {
+                    return $actualControllerReference->controller === $expectedControllerReference->controller && $actualRenderStrategy === $expectedRenderStrategy
+                        ? 'OK'
+                        : 'unexpected parameter values';
+                }
+            );
 
         $this->assertEquals(
             'OK',
