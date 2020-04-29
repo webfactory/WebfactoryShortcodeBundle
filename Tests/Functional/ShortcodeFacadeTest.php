@@ -50,8 +50,8 @@ final class ShortcodeFacadeTest extends KernelTestCase
     public function shortcodeFixtures(): array
     {
         return [
-            ['[test-esi foo=bar]', new ControllerReference('test-esi-controller', ['foo' => 'bar']), 'esi'],
-            ['[test-inline bar=baz]', new ControllerReference('test-inline-controller', ['bar' => 'baz']), 'inline'],
+            'esi rendering' => ['[test-esi foo=bar]', new ControllerReference('test-esi-controller', ['foo' => 'bar']), 'esi'],
+            'inline rendering' => ['[test-inline bar=baz]', new ControllerReference('test-inline-controller', ['bar' => 'baz']), 'inline'],
         ];
     }
 
