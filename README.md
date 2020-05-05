@@ -64,10 +64,10 @@ public function registerBundles()
 
 ### Defining your own shortcodes
 
-The easiest way is to add one anonymous service for each shortcode in your services definition:
+The easiest way is to add one service for each shortcode in your services definition:
 
 ```xml  
-<service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
+<service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
     <argument index="1">reference-to-your-replacement-controller</argument>
     <tag name="webfactory.shortcode" shortcode="your-shortcode-name"/>
 </service>
@@ -78,7 +78,7 @@ The parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi```
 inline rendering.
 
 The ```reference-to-your-replacement-controller``` could be a string like ```AppBundle\Controller\EmbeddedImageController::showAction```
-or if you prefer controllers as a service, something like ```app.controller.embedded_image:showAction```. We recommend
+or if use controllers as services, something like ```AppBundle\Controller\EmbeddedImageController:showAction```. We recommend
 using several controllers grouped by feature with only a few actions to keep things simple and unit testable, instead of
 one huge ShortcodeController for all shortcodes. But of course, that's up to you.
 
@@ -106,12 +106,12 @@ Then, write a service definition like this:
     
         <!-- ... -->
         
-        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
-            <argument index="1">app.controller.embedded_image:showAction</argument>
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+            <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
             <tag name="webfactory.shortcode" shortcode="image"/>
         </service>
         
-        <service id="app.controller.embedded_image" class="AppBundle\Controller\EmbeddedImageController">
+        <service id="AppBundle\Controller\EmbeddedImageController">
             <argument type="service" id="templating" />
         </service>
         
@@ -142,11 +142,7 @@ final class EmbeddedImageController
         $this->twigEngine = $twigEngine;
     }
 
-    /**
-     * @param string $url
-     * @return Response
-     */
-    public function showAction($url)
+    public function showAction(string $url): Response
     {
         if (!$url) {
             throw new \RuntimeException('No url provided');
@@ -207,8 +203,8 @@ Finally, enrich your shortcode tags with description and example attributes for 
     <!-- import guide.xml -->
 
     <services>
-        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
-            <argument index="1">app.controller.embedded_image:showAction</argument>
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+            <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
             <tag
                 name="webfactory.shortcode"
                 shortcode="image"
@@ -289,8 +285,8 @@ definition of your shortcode:
 <?xml version="1.0" ?>
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
-            <argument index="1">app.controller.embedded_image:showAction</argument>
+        <service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+            <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
             <tag name="webfactory.shortcode" ... />
             ...
             
