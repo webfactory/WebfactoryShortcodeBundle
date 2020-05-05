@@ -30,7 +30,7 @@ final class GuideController
     }
 
     /**
-     * @Template()
+     * @Template(template="@WebfactoryShortcode/Guide/list.html.twig")
      *
      * @return array
      */
@@ -42,7 +42,7 @@ final class GuideController
     }
 
     /**
-     * @Template()
+     * @Template(template="@WebfactoryShortcode/Guide/detail.html.twig")
      *
      * @return array
      */
