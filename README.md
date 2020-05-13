@@ -1,9 +1,5 @@
 # WebfactoryShortcodeBundle
 
-[![Build Status](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/webfactory/WebfactoryShortcodeBundle/?branch=master)
-
 WebfactoryShortcodeBundle is a Symfony bundle that integrates [thunderer/Shortcode](https://github.com/thunderer/Shortcode).
 
 It allows you to define shortcodes and their replacements in a jiffy. Shortcodes are special text fragments that can be
