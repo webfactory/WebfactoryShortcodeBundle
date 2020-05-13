@@ -33,10 +33,10 @@ class EmbeddedShortcodeHandler
 
     /**
      * @param FragmentHandler $fragmentHandler
-     * @param string $controllerName
-     * @param string $renderer
+     * @param string          $controllerName
+     * @param string          $renderer
      * @param LoggerInterface $logger
-     * @param RequestStack $requestStack
+     * @param RequestStack    $requestStack
      */
     public function __construct(
         FragmentHandler $fragmentHandler,
@@ -79,7 +79,7 @@ class EmbeddedShortcodeHandler
                 $this->renderer
             );
         } catch (\InvalidArgumentException $exception) {
-            if ($this->renderer === 'esi') {
+            if ('esi' === $this->renderer) {
                 throw new \InvalidArgumentException(
                     'An InvalidArgumentException occured while trying to render the shortcode '
                     .$shortcode->getShortcodeText().'. You\'ve probably tried to use the ESI rendering  strategy for '

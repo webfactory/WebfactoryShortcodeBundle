@@ -35,6 +35,7 @@ abstract class ShortcodeTest extends WebTestCase
 
     /**
      * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     *
      * @return Crawler
      */
     protected function getRenderedExampleHtml(?array $customParameters = null): string
@@ -44,6 +45,7 @@ abstract class ShortcodeTest extends WebTestCase
 
     /**
      * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     *
      * @return Crawler
      */
     protected function crawlRenderedExample(/*array*/ $customParameters = null): Crawler
@@ -64,8 +66,9 @@ abstract class ShortcodeTest extends WebTestCase
     }
 
     /**
-     * @param int $expectedStatusCode
-     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     * @param int               $expectedStatusCode
+     * @param array|string|null $customParameters   use of strings is deprecated, use array instead.
+     *
      * @return Crawler
      */
     protected function assertHttpStatusCodeWhenCrawlingRenderedExample(
@@ -80,6 +83,7 @@ abstract class ShortcodeTest extends WebTestCase
 
     /**
      * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     *
      * @return Crawler
      */
     private function getUrlWithRenderedExample(/*array*/ $customParameters = null): string
@@ -96,14 +100,14 @@ abstract class ShortcodeTest extends WebTestCase
 
     private function getCustomParametersAsString($customParametersAsMixed): ?string
     {
-        if (is_string($customParametersAsMixed)) {
+        if (\is_string($customParametersAsMixed)) {
             return $customParametersAsMixed;
         }
 
-        if (is_array($customParametersAsMixed)) {
+        if (\is_array($customParametersAsMixed)) {
             $customParametersAsString = '';
             foreach ($customParametersAsMixed as $name => $value) {
-                $customParametersAsString .= $name .'='.$value.' ';
+                $customParametersAsString .= $name.'='.$value.' ';
             }
 
             return $customParametersAsString;

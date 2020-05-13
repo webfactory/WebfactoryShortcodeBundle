@@ -4,7 +4,6 @@ namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
