@@ -248,12 +248,24 @@ final class ImageTest extends ShortcodeTest
     /** @test */
     public function teaser_gets_rendered(): void
     {
-        // without $customParameters, crawlRenderedExample() will crawl a page rendering the example configured in the
-        // shortcode tag, in this case "image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"  
-        $crawler = $this->crawlRenderedExample();
+        // without $customParameters, getRenderedExampleHtml() will get a rendering of the example configured in the
+        // shortcode tag, in this case "image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"
+        $this->assertStringContainsString(
+            '<img src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png" />',
+            $this->getRenderedExampleHtml()
+        );
+    }
 
-        $this->assertCount(1, $crawler->filter('.shortcode-container'));
-        $this->assertCount(1, $crawler->filter('.shortcode-container img[src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]'));
+    /** @test */
+    public function teaser_with_custom_parameters(): void
+    {
+        // Pass custom parameters as an array
+        $this->assertStringContainsString(
+            '<img src="custom-image-url" />',
+            $this->getRenderedExampleHtml([
+                'url' => 'custom-image-url', 
+            ])
+        );
     }
 
     /** @test */

@@ -3,6 +3,7 @@
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -10,6 +11,9 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 abstract class ShortcodeTest extends WebTestCase
 {
+    /** @var Client */
+    protected $client;
+
     /**
      * @return string name of the shortcode to test.
      */
@@ -24,15 +28,30 @@ abstract class ShortcodeTest extends WebTestCase
                 'Albeit being a '.__CLASS__.', '.\get_called_class().' does not define a shortcode to test.'
             );
         }
+
+        static::bootKernel();
+        $this->client = static::createClient();
     }
 
-    protected function crawlRenderedExample(string $customParameters = null): Crawler
+    /**
+     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     * @return Crawler
+     */
+    protected function getRenderedExampleHtml(?array $customParameters = null): string
+    {
+        return $this->crawlRenderedExample($customParameters)->html();
+    }
+
+    /**
+     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     * @return Crawler
+     */
+    protected function crawlRenderedExample(/*array*/ $customParameters = null): Crawler
     {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
-        $client = static::createClient();
-        $crawlerOnRenderedExamplePage = $client->request('GET', $urlWithRenderedExample);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $crawlerOnRenderedExamplePage = $this->client->request('GET', $urlWithRenderedExample);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $crawlerOnRenderedExample = $crawlerOnRenderedExamplePage->filter('#rendered-example');
         if (0 === $crawlerOnRenderedExample->count()) {
@@ -44,27 +63,52 @@ abstract class ShortcodeTest extends WebTestCase
         return $crawlerOnRenderedExample;
     }
 
-    protected function assertHttpStatusCodeWhenCrawlingRenderedExample(int $expectedStatusCode, string $customParameters = null): Crawler
-    {
+    /**
+     * @param int $expectedStatusCode
+     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     * @return Crawler
+     */
+    protected function assertHttpStatusCodeWhenCrawlingRenderedExample(
+        int $expectedStatusCode,
+        /*array*/ $customParameters = null
+    ): Crawler {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
-        $client = static::createClient();
-        $crawlerOnRenderedExamplePage = $client->request('GET', $urlWithRenderedExample);
-        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
+        $crawlerOnRenderedExamplePage = $this->client->request('GET', $urlWithRenderedExample);
+        $this->assertEquals($expectedStatusCode, $this->client->getResponse()->getStatusCode());
     }
 
-    protected function getUrlWithRenderedExample(string $customParameters = null): string
+    /**
+     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
+     * @return Crawler
+     */
+    private function getUrlWithRenderedExample(/*array*/ $customParameters = null): string
     {
-        static::bootKernel();
-
         $urlParameters = ['shortcode' => $this->getShortcodeToTest()];
-        if ($customParameters) {
-            $urlParameters['customParameters'] = $customParameters;
+
+        $customParametersAsString = $this->getCustomParametersAsString($customParameters);
+        if ($customParametersAsString) {
+            $urlParameters['customParameters'] = $customParametersAsString;
         }
 
-        return static::$kernel
-            ->getContainer()
-            ->get('router')
-            ->generate('webfactory.shortcode.guide-detail', $urlParameters);
+        return static::$container->get('router')->generate('webfactory.shortcode.guide-detail', $urlParameters);
+    }
+
+    private function getCustomParametersAsString($customParametersAsMixed): ?string
+    {
+        if (is_string($customParametersAsMixed)) {
+            return $customParametersAsMixed;
+        }
+
+        if (is_array($customParametersAsMixed)) {
+            $customParametersAsString = '';
+            foreach ($customParametersAsMixed as $name => $value) {
+                $customParametersAsString .= $name .'='.$value.' ';
+            }
+
+            return $customParametersAsString;
+        }
+
+        return null;
     }
 }
