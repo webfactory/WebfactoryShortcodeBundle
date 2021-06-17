@@ -15,12 +15,9 @@ final class ShortcodeExtension extends AbstractExtension
     /** @var Processor */
     private $processor;
 
-    /**
-     * @param Processor $processor
-     */
-    public function __construct(Processor $processor, EventContainer $eventContainer)
+    public function __construct(Processor $processor)
     {
-        $this->processor = $processor->withMaxIterations(null)->withEventContainer($eventContainer);
+        $this->processor = $processor;
     }
 
     public function getFilters()
