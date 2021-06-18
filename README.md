@@ -216,6 +216,22 @@ With the route prefix defined as above, call ```/shortcodes/``` to get the list 
 detail pages.
 
 
+### Configuration
+
+In most cases, the default values should work fine. But you might want to configure something else, e.g. if the default
+parser needs too much memory for a large snippet. See thunderer's documentation on [parsing](https://github.com/thunderer/Shortcode#parsing)
+and [configuration](https://github.com/thunderer/Shortcode#configuration) so you understand the advantages,
+disadvantages and limitations:
+
+```yaml
+// config.yml
+
+webfactory_shortcode:
+    parser: 'regex'      # default: regular
+    recursion_depth: 2   # default: null
+    max_iterations: 2    # default: null
+```  
+
 ### Automated Tests for your Shortcodes
 
 With the shortcode guide enabled (remember: you may enable it just in your test environment), you can easily write

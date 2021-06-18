@@ -11,6 +11,8 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('webfactory_shortcode');
 
+        // For details on these configuration options, see https://github.com/thunderer/Shortcode#parsing and
+        // https://github.com/thunderer/Shortcode#configuration .
         $treeBuilder->getRootNode()
             ->children()
                 ->enumNode('parser')
