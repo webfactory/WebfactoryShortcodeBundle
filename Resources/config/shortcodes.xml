@@ -8,13 +8,16 @@
         <!-- Definition of a Shortcode HandlerContainer instance. -->
         <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
 
-        <!-- Definition of a Shortcode RegularParser instance. -->
-        <service id="Thunder\Shortcode\Parser\RegularParser"/>
+        <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser"/>
+        <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser"/>
 
         <!-- Definition of a Shortcode Processor instance. -->
         <service id="Thunder\Shortcode\Processor\Processor">
-            <argument type="service" id="Thunder\Shortcode\Parser\RegularParser" />
+            <argument type="service" id="webfactory_shortcode.parser" />
             <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
+            <call method="withEventContainer">
+                <argument type="service" id="Thunder\Shortcode\EventContainer\EventContainer" />
+            </call>
         </service>
 
         <!-- Definition of a Shortcode EventContainer instance. -->
@@ -55,7 +58,6 @@
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
             <argument type="service" id="Thunder\Shortcode\Processor\Processor"/>
-            <argument type="service" id="Thunder\Shortcode\EventContainer\EventContainer"/>
             <tag name="twig.extension"/>
         </service>
 
