@@ -10,10 +10,11 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('webfactory_shortcode');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('webfactory_shortcode');
 
         // For details on these configuration options, see https://github.com/thunderer/Shortcode#parsing and
         // https://github.com/thunderer/Shortcode#configuration .
-        $treeBuilder->getRootNode()
+        $rootNode
             ->children()
                 ->enumNode('parser')
                     ->info('Which parser type to use, choose "regular" or "regex".')
