@@ -12,9 +12,6 @@ use Thunder\Shortcode\Shortcode\ReplacedShortcode;
  */
 final class RemoveWrappingParagraphElementsEventHandler
 {
-    /**
-     * @param ReplaceShortcodesEvent $event
-     */
     public function __invoke(ReplaceShortcodesEvent $event)
     {
         /* The text still containing shortcodes */

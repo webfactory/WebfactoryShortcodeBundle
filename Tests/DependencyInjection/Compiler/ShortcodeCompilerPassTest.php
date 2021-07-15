@@ -3,6 +3,7 @@
 namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -19,7 +20,7 @@ final class ShortcodeCompilerPassTest extends TestCase
      */
     private $compilerPass;
 
-    /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ContainerBuilder|PHPUnit_Framework_MockObject_MockObject */
     private $containerBuilder;
 
     protected function setUp(): void

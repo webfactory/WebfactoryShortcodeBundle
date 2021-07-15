@@ -2,6 +2,8 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
+use PHPUnit_Framework_ExpectationFailedException;
+use PHPUnit_Framework_IncompleteTestError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
@@ -24,9 +26,7 @@ abstract class ShortcodeTest extends WebTestCase
         parent::setUp();
 
         if ('' === $this->getShortcodeToTest() || null === $this->getShortcodeToTest()) {
-            throw new \PHPUnit_Framework_IncompleteTestError(
-                'Albeit being a '.__CLASS__.', '.\get_called_class().' does not define a shortcode to test.'
-            );
+            throw new PHPUnit_Framework_IncompleteTestError('Albeit being a '.__CLASS__.', '.static::class.' does not define a shortcode to test.');
         }
 
         static::bootKernel();
@@ -45,8 +45,6 @@ abstract class ShortcodeTest extends WebTestCase
 
     /**
      * @param array|string|null $customParameters use of strings is deprecated, use array instead.
-     *
-     * @return Crawler
      */
     protected function crawlRenderedExample(/*array*/ $customParameters = null): Crawler
     {
@@ -57,19 +55,14 @@ abstract class ShortcodeTest extends WebTestCase
 
         $crawlerOnRenderedExample = $crawlerOnRenderedExamplePage->filter('#rendered-example');
         if (0 === $crawlerOnRenderedExample->count()) {
-            throw new \PHPUnit_Framework_ExpectationFailedException(
-                'No rendered example found for shortcode "'.$this->shortcode.'"'
-            );
+            throw new PHPUnit_Framework_ExpectationFailedException('No rendered example found for shortcode "'.$this->shortcode.'"');
         }
 
         return $crawlerOnRenderedExample;
     }
 
     /**
-     * @param int               $expectedStatusCode
-     * @param array|string|null $customParameters   use of strings is deprecated, use array instead.
-     *
-     * @return Crawler
+     * @param array|string|null $customParameters use of strings is deprecated, use array instead.
      */
     protected function assertHttpStatusCodeWhenCrawlingRenderedExample(
         int $expectedStatusCode,

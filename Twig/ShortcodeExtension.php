@@ -2,7 +2,6 @@
 
 namespace Webfactory\ShortcodeBundle\Twig;
 
-use Thunder\Shortcode\EventContainer\EventContainer;
 use Thunder\Shortcode\Processor\Processor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Twig_Environment;
 
 final class ShortcodeFacadeTest extends KernelTestCase
 {
@@ -93,7 +94,7 @@ final class ShortcodeFacadeTest extends KernelTestCase
         /** @var $container ContainerInterface */
         $container = static::$kernel->getContainer();
 
-        /** @var \Twig_Environment $twig */
+        /** @var Twig_Environment $twig */
         $twig = $container->get('twig');
         $template = $twig->createTemplate($templateCode);
 

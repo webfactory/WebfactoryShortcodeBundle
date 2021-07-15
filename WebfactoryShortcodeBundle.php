@@ -2,8 +2,8 @@
 
 namespace Webfactory\ShortcodeBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Webfactory\ShortcodeBundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 
 /**

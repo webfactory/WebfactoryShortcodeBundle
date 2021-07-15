@@ -53,8 +53,6 @@ final class TestKernel extends Kernel
      *
      *     $routes->import('config/routing.yml');
      *     $routes->add('/admin', 'AppBundle:Admin:dashboard', 'admin_dashboard');
-     *
-     * @param RouteCollectionBuilder $routes
      */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
