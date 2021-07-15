@@ -13,12 +13,13 @@ env:
 jobs:
     PHPUnit:
 
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-18.04
         strategy:
             fail-fast: false
             matrix:
                 include:
                     - { symfony-locked-version: none, dependency-version: prefer-lowest }
+                    - { symfony-locked-version: none, dependency-version: prefer-stable }
                     - { symfony-locked-version: 3.4.*, dependency-version: prefer-stable }
                     - { symfony-locked-version: 4.4.*, dependency-version: prefer-stable }
         name: PHPUnit (Symfony Version Lock ${{ matrix.symfony-locked-version }}, ${{ matrix.dependency-version }})
@@ -31,13 +32,13 @@ jobs:
             -   uses: actions/cache@v2
                 with:
                     path: vendor
-                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json', 'composer.lock') }}
+                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
                     restore-keys: |
                         composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
-                        composer-${{ runner.os }}-${{ env.PHP_VERSION }}-
-                        composer-${{ runner.os }}-
             -   run: VERSION=${{ matrix.symfony-locked-version }} .github/workflows/lock-symfony-version.sh
                 if: matrix.symfony-locked-version != 'none'
             -   run: composer update --${{ matrix.dependency-version }} --no-interaction --no-scripts --no-progress --prefer-dist
             -   run: composer show
             -   run: vendor/bin/phpunit
+            -   uses: lhotari/action-upterm@v1
+                if: failure()
