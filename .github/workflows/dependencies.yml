@@ -1,0 +1,32 @@
+name: Dependencies
+
+permissions:
+    contents: read
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+
+env:
+    PHP_VERSION: 7.2
+
+jobs:
+    composer-require-checker:
+        name: Check missing composer requirements
+        runs-on: ubuntu-20.04
+        steps:
+            -   uses: shivammathur/setup-php@v2
+                with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  tools: composer:v2
+            -   uses: actions/checkout@v2
+            -   uses: actions/cache@v2
+                with:
+                    path: vendor
+                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
+                    restore-keys: |
+                        composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
+            -   run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
+            -   uses: docker://webfactory/composer-require-checker:3.2.0

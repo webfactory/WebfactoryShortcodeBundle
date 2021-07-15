@@ -3,4 +3,4 @@ vendor/
 phpunit.xml
 .phpunit.result.cache
 .php_cs.cache
-Tests/Fixtures/cache/
+tests/Fixtures/cache/
