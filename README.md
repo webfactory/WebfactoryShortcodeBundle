@@ -63,15 +63,18 @@ public function registerBundles()
 The easiest way is to add one service for each shortcode in your services definition:
 
 ```xml  
-<service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+<service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
     <argument index="1">reference-to-your-replacement-controller</argument>
     <tag name="webfactory.shortcode" shortcode="your-shortcode-name"/>
 </service>
 ```
 
-The parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html)
-(which may be nice for caching), while the parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline``` will use
-inline rendering.
+The parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline``` will use
+inline rendering while the parent ```Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi``` will use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html).
+
+ESI may be nice for caching but comes with a problem: ESI embeds controller actions by calling a special internal `_fragment`-URL and needs to somehow serialize all parameters for an action in this URL. This works well for scalar values but neither for objects nor arrays of scalar values. But for context sensitive shortcodes, we pass the request attributes to the embedded controller action. And these request attributes might contain objects, e.g. the result object of a ParamConverter. This can lead to hard to debug errors, especially when recursion comes into play.
+
+Also, logging needs more configuration (explained in the Logging section) with ESI.
 
 The ```reference-to-your-replacement-controller``` could be a string like ```AppBundle\Controller\EmbeddedImageController::showAction```
 or if use controllers as services, something like ```AppBundle\Controller\EmbeddedImageController:showAction```. We recommend
@@ -102,7 +105,7 @@ Then, write a service definition like this:
     
         <!-- ... -->
         
-        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
             <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
             <tag name="webfactory.shortcode" shortcode="image"/>
         </service>
@@ -199,7 +202,7 @@ Finally, enrich your shortcode tags with description and example attributes for 
     <!-- import guide.xml -->
 
     <services>
-        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
+        <service id="webfactory.shortcode.image" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
             <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
             <tag
                 name="webfactory.shortcode"
