@@ -14,7 +14,6 @@ comment:
 In analogy to living style guides, this bundle also provides an optional shortcode guide. This guide can be used for
 automated testing of your shortcodes as well. 
  
-
 ## Installation
 
 As usual, install via [composer](https://getcomposer.org/) and register the bundle in your application:
@@ -54,7 +53,6 @@ public function registerBundles()
     // ...
 }
 ```
-
 
 ## Usage
 
@@ -161,7 +159,6 @@ And finally a twig template like this:
 </div>
 ```
 
-
 ### Activating the Shortcode Guide
 
 The optional shortcode guide is a controller providing an overview page of the configured shortcodes and a detail page
@@ -217,7 +214,6 @@ Finally, enrich your shortcode tags with description and example attributes for 
 
 With the route prefix defined as above, call ```/shortcodes/``` to get the list of shortcodes and follow the links to the
 detail pages.
-
 
 ### Configuration
 
@@ -294,7 +290,6 @@ final class ImageTest extends ShortcodeTest
 }
 ```
 
-
 ## Logging
 
 When something goes wrong with the resolving of a shortcode, maybe you not only want to know which shortcode with
@@ -303,9 +298,7 @@ that embedded the shortcode.
 
 This is tricky is you embed your shortcode controllers via ESI, as the ESI subrequest is in Symfony terms a master
 request, preventing you from getting your answer from RequestStack::getMasterRequest(). Hence, the
-`EmbedShortcodeHandler` logs with the default monolog handler which controller it will call to resolve the shortcode.
-You can overwrite the `EmbedShortcodeHandler`'s logger, e.g. if you want to change the channel, in the service
-definition of your shortcode:
+`EmbedShortcodeHandler` logs this information in the `shortcode` channel.
 
 ```xml
 <!-- src/AppBundle/Resources/config/shortcodes.xml -->
@@ -323,12 +316,11 @@ definition of your shortcode:
 </container>
 ```
 
-
 ## Credits, Copyright and License
 
 This bundle was started at webfactory GmbH, Bonn.
 
-- <http://www.webfactory.de>
-- <http://twitter.com/webfactory>
+- <https://www.webfactory.de>
+- <https://twitter.com/webfactory>
 
-Copyright 2018 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
+Copyright 2018-2021 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).

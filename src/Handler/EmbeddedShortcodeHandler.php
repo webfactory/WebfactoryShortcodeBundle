@@ -56,7 +56,7 @@ class EmbeddedShortcodeHandler
      */
     public function __invoke(ShortcodeInterface $shortcode)
     {
-        $this->logger->notice(
+        $this->logger->info(
             'Request {controllerName} with parameters {parameters} and renderer {renderer} to resolve shortcode {shortcode}, triggered by a request to {url}.',
             [
                 'controllerName' => $this->controllerName,

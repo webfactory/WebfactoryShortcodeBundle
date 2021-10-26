@@ -42,6 +42,7 @@
             <argument>esi</argument>
             <argument type="service" id="request_stack" />
             <argument type="service" id="logger" on-invalid="null" />
+            <tag name="monolog.logger" channel="shortcode" />
         </service>
 
         <!-- alias for BC -->
@@ -54,6 +55,7 @@
             <argument>inline</argument>
             <argument type="service" id="request_stack" />
             <argument type="service" id="logger" on-invalid="null" />
+            <tag name="monolog.logger" channel="shortcode" />
         </service>
 
         <!-- alias for BC -->
