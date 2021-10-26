@@ -67,17 +67,9 @@ class EmbeddedShortcodeHandler
             ]
         );
 
-        try {
-            return $this->fragmentHandler->render(
-                new ControllerReference($this->controllerName, $shortcode->getParameters()),
-                $this->renderer
-            );
-        } catch (InvalidArgumentException $exception) {
-            if ('esi' === $this->renderer) {
-                throw new InvalidArgumentException('An InvalidArgumentException occured while trying to render the shortcode '.$shortcode->getShortcodeText().'. You\'ve probably tried to use the ESI rendering  strategy for '.'your shortcodes while handling a request that contained non-scalar values as part of URI '.'attributes. This can happen e.g. when using Param Converters for your original controller '.'action, as the request (containing the conversion result) is automatically passed to the call of '.'the shortcode controller to allow context sensitive shortcodes. You could use '.'Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline as parent in your '.'shortcode\'s service defintion, so that the inline instead of ESI rendering strategy will be '.'used.', 0, $exception);
-            }
-
-            throw $exception;
-        }
+        return $this->fragmentHandler->render(
+            new ControllerReference($this->controllerName, $shortcode->getParameters()),
+            $this->renderer
+        );
     }
 }
