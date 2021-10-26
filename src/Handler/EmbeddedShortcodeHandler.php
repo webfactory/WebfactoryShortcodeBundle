@@ -63,7 +63,7 @@ class EmbeddedShortcodeHandler
                 'parameters' => json_encode($shortcode->getParameters()),
                 'renderer' => $this->renderer,
                 'shortcode' => $shortcode->getName(),
-                'url' => $this->requestStack->getMasterRequest()->getRequestUri(),
+                'url' => $this->requestStack->getMasterRequest() ? $this->requestStack->getMasterRequest()->getRequestUri() : '-',
             ]
         );
 
