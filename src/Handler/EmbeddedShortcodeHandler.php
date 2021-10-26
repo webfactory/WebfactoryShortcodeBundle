@@ -2,7 +2,6 @@
 
 namespace Webfactory\ShortcodeBundle\Handler;
 
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
