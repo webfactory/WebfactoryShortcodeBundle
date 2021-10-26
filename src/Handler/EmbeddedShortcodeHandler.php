@@ -69,10 +69,7 @@ class EmbeddedShortcodeHandler
 
         try {
             return $this->fragmentHandler->render(
-                new ControllerReference(
-                    $this->controllerName,
-                    array_merge(['request' => $this->requestStack->getCurrentRequest()], $shortcode->getParameters())
-                ),
+                new ControllerReference($this->controllerName, $shortcode->getParameters()),
                 $this->renderer
             );
         } catch (InvalidArgumentException $exception) {
