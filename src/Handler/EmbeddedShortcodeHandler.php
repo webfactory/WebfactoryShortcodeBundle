@@ -7,6 +7,8 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Throwable;
+use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 /**
@@ -66,9 +68,22 @@ class EmbeddedShortcodeHandler
             ]
         );
 
-        return $this->fragmentHandler->render(
-            new ControllerReference($this->controllerName, $shortcode->getParameters()),
-            $this->renderer
-        );
+        try {
+            return $this->fragmentHandler->render(
+                new ControllerReference($this->controllerName, $shortcode->getParameters()),
+                $this->renderer
+            );
+        } catch (Throwable $exception) {
+            $this->logger->error('An exception was thrown when rendering the shortcode', ['exception' => $exception]);
+
+            if ($shortcode instanceof ProcessedShortcode) {
+                $text = trim($shortcode->getShortcodeText(), '[]');
+            } else {
+                $text = $shortcode->getName().' ...';
+            }
+
+            // Avoid an infinite loop that occurs if the original shortcode is returned
+            return "<code>&#91;$text&#93;</code>";
+        }
     }
 }
