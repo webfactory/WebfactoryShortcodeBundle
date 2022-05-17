@@ -7,9 +7,9 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Throwable;
 use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
-use Throwable;
 
 /**
  * Handler for thunderer\Shortcode that embeds the configured renderer for a shortcode.
@@ -79,8 +79,9 @@ class EmbeddedShortcodeHandler
             if ($shortcode instanceof ProcessedShortcode) {
                 $text = trim($shortcode->getShortcodeText(), '[]');
             } else {
-                $text = $shortcode->getName() . ' ...';
+                $text = $shortcode->getName().' ...';
             }
+
             return "<code>&#91;$text&#93;</code>";
         }
     }
