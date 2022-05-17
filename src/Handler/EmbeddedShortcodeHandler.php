@@ -82,6 +82,7 @@ class EmbeddedShortcodeHandler
                 $text = $shortcode->getName().' ...';
             }
 
+            // Avoid an infinite loop that occurs if the original shortcode is returned
             return "<code>&#91;$text&#93;</code>";
         }
     }
