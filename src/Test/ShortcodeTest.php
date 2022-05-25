@@ -2,8 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Test;
 
-use PHPUnit_Framework_ExpectationFailedException;
-use PHPUnit_Framework_IncompleteTestError;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
@@ -26,7 +25,7 @@ abstract class ShortcodeTest extends WebTestCase
         parent::setUp();
 
         if ('' === $this->getShortcodeToTest() || null === $this->getShortcodeToTest()) {
-            throw new \RuntimeException('Albeit being a '.__CLASS__.', '.static::class.' does not define a shortcode to test.');
+            throw new RuntimeException('Albeit being a '.__CLASS__.', '.static::class.' does not define a shortcode to test.');
         }
 
         static::bootKernel();
@@ -55,7 +54,7 @@ abstract class ShortcodeTest extends WebTestCase
 
         $crawlerOnRenderedExample = $crawlerOnRenderedExamplePage->filter('#rendered-example');
         if (0 === $crawlerOnRenderedExample->count()) {
-            throw new \RuntimeException('No rendered example found for shortcode "'.$this->shortcode.'"');
+            throw new RuntimeException('No rendered example found for shortcode "'.$this->shortcode.'"');
         }
 
         return $crawlerOnRenderedExample;
