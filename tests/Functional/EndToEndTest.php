@@ -71,11 +71,11 @@ class EndToEndTest extends KernelTestCase
 
     private function renderTwig(string $templateCode, array $context = [], Request $request = null): string
     {
-        self::bootKernel();
+        $kernel = self::bootKernel();
 
-        $container = static::getContainer();
+        $container = $kernel->getContainer(); // BC with Symfony 3.4
 
-        $requestStack = $container->get(RequestStack::class);
+        $requestStack = $container->get('request_stack'); // BC with Symfony 3.4
         $requestStack->push($request ?? new Request());
 
         $twig = $container->get('twig');

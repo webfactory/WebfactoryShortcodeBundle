@@ -24,8 +24,7 @@
         "symfony/framework-bundle": "^3.4.23|^4.2.4|^5.0",
         "symfony/phpunit-bridge": ">= 6.0",
         "symfony/routing": "^3.4.11|^4.0|^5.0",
-        "symfony/templating": "^3.4.11|^4.0|^5.0",
-        "symfony/twig-bundle": "^3.4.11|^4.0|^5.0",
+        "symfony/twig-bundle": "^4.4|^5.0",
         "symfony/yaml": "^3.4.11|^4.0|^5.0"
     },
 
