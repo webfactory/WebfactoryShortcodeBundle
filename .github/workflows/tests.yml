@@ -8,7 +8,6 @@ on:
 
 env:
     SYMFONY_DEPRECATIONS_HELPER: weak
-    PHP_VERSION: 7.2
 
 jobs:
     PHPUnit:
@@ -18,27 +17,25 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - { symfony-locked-version: none, dependency-version: prefer-lowest }
-                    - { symfony-locked-version: none, dependency-version: prefer-stable }
-                    - { symfony-locked-version: 3.4.*, dependency-version: prefer-stable }
-                    - { symfony-locked-version: 4.4.*, dependency-version: prefer-stable }
-        name: PHPUnit (Symfony Version Lock ${{ matrix.symfony-locked-version }}, ${{ matrix.dependency-version }})
+                    - { php-version: 7.2, symfony-locked-version: none, dependency-version: prefer-lowest }
+                    - { php-version: 7.2, symfony-locked-version: 3.4.*, dependency-version: prefer-stable }
+                    - { php-version: 7.4, symfony-locked-version: 4.4.*, dependency-version: prefer-stable }
+                    - { php-version: 8.1, symfony-locked-version: none, dependency-version: prefer-stable }
+        name: PHPUnit (PHP ${{matrix.php-version}}, Symfony Version Lock ${{ matrix.symfony-locked-version }}, ${{ matrix.dependency-version }})
         steps:
             -   uses: actions/checkout@v2
             -   uses: shivammathur/setup-php@v2
                 with:
-                  php-version: ${{ env.PHP_VERSION }}
+                  php-version: ${{ matrix.php-version }}
                   tools: composer:v2
             -   uses: actions/cache@v2
                 with:
                     path: vendor
-                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
+                    key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
                     restore-keys: |
-                        composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
+                        composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
             -   run: VERSION=${{ matrix.symfony-locked-version }} .github/workflows/lock-symfony-version.sh
                 if: matrix.symfony-locked-version != 'none'
-            -   run: composer update --${{ matrix.dependency-version }} --no-interaction --no-scripts --no-progress --prefer-dist
+            -   run: composer update --${{ matrix.dependency-version }} --no-interaction --no-scripts --no-progress --ansi
             -   run: composer show
             -   run: vendor/bin/phpunit
-            -   uses: lhotari/action-upterm@v1
-                if: failure()
