@@ -22,5 +22,6 @@ return PhpCsFixer\Config::create()
             ->notPath('node_modules/')    
             ->notPath('var/cache')
             ->notPath('vendor/')
+            ->notPath('tests/Fixtures/cache')
     )
 ;

@@ -5,7 +5,6 @@ namespace Webfactory\ShortcodeBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -29,7 +28,7 @@ final class WebfactoryShortcodeExtension extends Extension
         $container->setParameter('webfactory_shortcode.max_iterations', $config['max_iterations']);
 
         foreach ($config['shortcodes'] as $shortcodeName => $shortcodeDefinition) {
-            $definition = new ChildDefinition('Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.' . $shortcodeDefinition['method']);
+            $definition = new ChildDefinition('Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.'.$shortcodeDefinition['method']);
             $definition->replaceArgument(1, $shortcodeDefinition['controller']);
             $definition->addTag('webfactory.shortcode', ['shortcode' => $shortcodeName, 'description' => $shortcodeDefinition['description'], 'example' => $shortcodeDefinition['example']]);
             $container->setDefinition('webfactory_shortcode.handler.'.$shortcodeName, $definition);

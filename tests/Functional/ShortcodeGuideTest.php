@@ -9,7 +9,7 @@ class ShortcodeGuideTest extends WebTestCase
     /**
      * @test
      */
-    public function ShortcodeGuide_contains_test_entry(): void
+    public function shortcode_guide_contains_test_entry(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
@@ -21,4 +21,3 @@ class ShortcodeGuideTest extends WebTestCase
         self::assertStringContainsString('test-shortcode-guide test=true', $text);
     }
 }
-
