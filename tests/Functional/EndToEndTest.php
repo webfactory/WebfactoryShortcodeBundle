@@ -5,6 +5,7 @@ namespace Webfactory\ShortcodeBundle\Tests\Functional;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Test that given test shortcodes are found in a Twig template and being replaced with the
@@ -71,11 +72,10 @@ class EndToEndTest extends KernelTestCase
 
     private function renderTwig(string $templateCode, array $context = [], Request $request = null): string
     {
-        $kernel = self::bootKernel();
+        self::bootKernel();
+        $container = static::$container;
 
-        $container = $kernel->getContainer(); // BC with Symfony 3.4
-
-        $requestStack = $container->get('request_stack'); // BC with Symfony 3.4
+        $requestStack = $container->get(RequestStack::class);
         $requestStack->push($request ?? new Request());
 
         $twig = $container->get('twig');
