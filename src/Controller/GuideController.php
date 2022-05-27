@@ -2,14 +2,15 @@
 
 namespace Webfactory\ShortcodeBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Guide for the configured shortcodes showing a list overview and detail pages with the rendered shortcode.
  */
-final class GuideController
+class GuideController extends AbstractController
 {
     /**
      * @var array
@@ -29,24 +30,14 @@ final class GuideController
         $this->shortcodeTags = $shortcodeTags;
     }
 
-    /**
-     * @Template(template="@WebfactoryShortcode/Guide/list.html.twig")
-     *
-     * @return array
-     */
-    public function listAction()
+    public function listAction(): Response
     {
-        return [
+        return $this->render('@WebfactoryShortcode/Guide/list.html.twig', [
             'shortcodeTags' => $this->shortcodeTags,
-        ];
+        ]);
     }
 
-    /**
-     * @Template(template="@WebfactoryShortcode/Guide/detail.html.twig")
-     *
-     * @return array
-     */
-    public function detailAction($shortcode, Request $request)
+    public function detailAction($shortcode, Request $request): Response
     {
         foreach ($this->shortcodeTags as $shortcodeTag) {
             if ($shortcodeTag['shortcode'] === $shortcode) {
@@ -56,9 +47,9 @@ final class GuideController
                     $shortcodeTag['example'] = $shortcode.' '.$customParameters;
                 }
 
-                return [
+                return $this->render('@WebfactoryShortcode/Guide/detail.html.twig', [
                     'shortcodeTag' => $shortcodeTag,
-                ];
+                ]);
             }
         }
 

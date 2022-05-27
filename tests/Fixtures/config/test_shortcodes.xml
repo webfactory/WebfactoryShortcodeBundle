@@ -8,15 +8,13 @@
         <!-- Two shortcode handlers defined for tests -->
 
         <service id="test_esi" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi">
-            <argument index="1">test-esi-controller</argument>
-            <argument index="4">null</argument><!-- Logger -->
-            <tag name="webfactory.shortcode" shortcode="test-esi"/>
+            <argument index="1">Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::test</argument>
+            <tag name="webfactory.shortcode" shortcode="test-service-esi" />
         </service>
 
         <service id="test_inline" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline">
-            <argument index="1">test-inline-controller</argument>
-            <argument index="4">null</argument><!-- Logger -->
-            <tag name="webfactory.shortcode" shortcode="test-inline"/>
+            <argument index="1">Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::test</argument>
+            <tag name="webfactory.shortcode" shortcode="test-service-inline" />
         </service>
 
     </services>
