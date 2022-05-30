@@ -8,7 +8,7 @@
         <defaults autowire="true" autoconfigure="true" />
 
         <service id="Webfactory\ShortcodeBundle\Controller\GuideController">
-            <argument><!-- shortcode description placeholder argument --></argument>
+            <argument><!-- shortcode definitions placeholder argument --></argument>
             <argument type="service" id="twig" />
             <tag name="controller.service_arguments"/>
         </service>
