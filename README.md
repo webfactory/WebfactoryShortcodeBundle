@@ -158,6 +158,33 @@ The Symfony documentation describes how [Application Tests](https://symfony.com/
 
 Instead, write an [integration test](https://symfony.com/doc/current/testing.html#integration-tests) where you retrieve the controller as a service from the Dependency Injection Container and invoke the appropriate method on it directly. Then, just like described in the section before, perform assertions on the Response returned by the controller.
 
+Here is an example of what a test might look like.
+
+```php
+<?php
+
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+class MyShortcodeControllerTest extends KernelTestCase
+{
+    public function test_renderImageAction_returns_img(): void
+    {
+        // Assume the controller is used to turn `[img id=42]` into some HTML markup
+
+        // create fixture/setup image with ID 42 in the database or similar
+        // ...
+
+        // Exercise controller method
+        $container = static::getContainer();
+        $controller = $container->get(MyShortcodeController::class);
+        $response = $controller->renderImageAction(42);
+
+        // Verify outcome
+        self::assertStringContainsString('<img src="..." />', (string) $response->getContent());
+    }
+}
+```
+
 ### Testing Configuration
 
 After you have written some tests that verify your handlers work as expected for different input parameters or other circumstances (e. g. database content), you also want to make sure a given handler is registered correctly and connected with the right shortcode name. Since we are now concerned with how this bundle, your configuration and your handlers all play together, we're in the realm of integration testing. These tests will be slower, since we need to boot a Symfony Kernel, fetch services from the Dependency Injection Container and test how various parts play together.
