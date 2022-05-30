@@ -138,90 +138,72 @@ webfactory_shortcode:
     max_iterations: 2    # default: null
 ```  
 
-### Automated Tests for your Shortcodes
+## Testing your Shortcodes
 
-With the shortcode guide enabled (remember: you may enable it just in your test environment), you can easily write
-functional tests for your shortcodes using the rendered detail pages. This way, you can test even shortcodes with
-complex dependencies. But as functional tests are slow, you may want to keep your shortcode tests in a seperate slow
-test suite.   
+This section provides a few hints and starting pointers on testing your shortcode handlers and bundle configuration.
 
-To speed things up, the bundle provides the abstract ```\Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest```
-class for you to extend. Using it, your test class may look like this (we recommend one test class for each shortcode):
+### Direct Unit Tests
+
+In general, try to start with unit testing your shortcode handlers directly.
+
+No matter whether your handler is a simple class implementing the `__invoke` magic method or a Symfony Controller with one or several methods: Direct unit tests are the easiest way to have full control over the handler's (or controller's) input, and to get immediate access to its return value. This allows you to test also a broader range of input parameters and verify the outcomes. In this case, you will typically use Mock Objects to substitute some or all other classes and services your handler depends upon.
+
+If your shortcode handler produces HTML output, the [Symfony DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html) might be helpful to perform assertions on the HTML structure and content.
+
+### Functional Tests for shortcode-handling Controllers
+
+When using a controller to handle a shortcode, and the controller uses Twig for rendering, you might want to do a full functional (integration) test instead of mocking the Twig engine.
+
+The Symfony documentation describes how [Application Tests](https://symfony.com/doc/current/testing.html#write-your-first-application-test) can be performed. This approach, however, is probably not suited for your shortcode controllers since these typically _are not_ reachable through routes and so you cannot perform direct HTTP requests against them.
+
+Instead, write an [integration test](https://symfony.com/doc/current/testing.html#integration-tests) where you retrieve the controller as a service from the Dependency Injection Container and invoke the appropriate method on it directly. Then, just like described in the section before, perform assertions on the Response returned by the controller.
+
+### Testing Configuration
+
+After you have written some tests that verify your handlers work as expected for different input parameters or other circumstances (e. g. database content), you also want to make sure a given handler is registered correctly and connected with the right shortcode name. Since we are now concerned with how this bundle, your configuration and your handlers all play together, we're in the realm of integration testing. These tests will be slower, since we need to boot a Symfony Kernel, fetch services from the Dependency Injection Container and test how various parts play together.
+
+This bundle contains the `\Webfactory\ShortcodeBundle\Test\ShortcodeDefinitionTestHelper` class and a public service of the same name. Depending on the degree of test specifity you prefer, you can use this service to verify that...
+
+* A given shortcode name is known, i. e. a handler has been set up for it 
+* Retrieve the handler for a given shortcode name, so you can for example perform assertions on the class being used
+* When using controllers as shortcode handlers, test if the controller reference for a given shortcode can be resolved (the controller actually exists)
+* Retrieve an instance of the controller to perform assertions on it.
+
+For all these tests, you probably need to use `KernelTestCase` as your test base class ([documentation](https://symfony.com/doc/current/testing.html#integration-tests)). Basically, you will need to boot the kernel, then get the `ShortcodeDefinitionTestHelper` from the container and use its methods to check your shortcode configuration.
+
+Maybe you want to have a look at [the tests for `ShortcodeDefinitionTestHelper` itself](tests/Functional/ShortcodeDefinitionTestHelperTest.php) to see a few examples of how this class can be used.
+
+Remember – this type of test should not test all the possible inputs and outputs for your handlers; you've already covered that with more specific, direct tests. In this test layer, we're only concerned with making sure all the single parts are connected correctly.
+
+### Full End-to-End Tests
+
+If, for some reason, you would like to do a full end-to-end test for shortcode processing, from a given string containing shortcode markup to the processed result,  have a look at the `\Webfactory\ShortcodeBundle\Test\EndToEndTestHelper` class.
+
+This helper class can be used in integration test cases and will do the full shortcode processing on a given input, including dispatching sub-requests to controllers used as shortcode handlers.
+
+A test might look like this:
 
 ```php
 <?php
-# src/AppBundle/Tests/Shortcodes/ImageTest.php
 
-namespace AppBundle\Tests\Shortcodes;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
 
-use Webfactory\ShortcodeBundle\Tests\Functional\ShortcodeTest;
-
-final class ImageTest extends ShortcodeTest
+class MyFullScaleTest extends KernelTestCase
 {
-    protected function getShortcodeToTest(): string
-    {
-        return 'image';
-    }
-
     /** @test */
-    public function teaser_gets_rendered(): void
+    public function replace_text_color(): void
     {
-        // without $customParameters, getRenderedExampleHtml() will get a rendering of the example configured in the
-        // shortcode tag, in this case "image url=https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"
-        $this->assertStringContainsString(
-            '<img src="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png" />',
-            $this->getRenderedExampleHtml()
-        );
-    }
-
-    /** @test */
-    public function teaser_with_custom_parameters(): void
-    {
-        // Pass custom parameters as an array
-        $this->assertStringContainsString(
-            '<img src="custom-image-url" />',
-            $this->getRenderedExampleHtml([
-                'url' => 'custom-image-url', 
-            ])
-        );
-    }
-
-    /** @test */
-    public function teaser_to_nonexisting_page_gives_error(): void
-    {
-        // both crawlRenderedExample() and assertHttpStatusCodeWhenCrawlingRenderedExample() accept a $customParameters
-        // argument that will replace the parameters provided in the configuration of the shortcode tag.
-        // This can be used to cover more test cases, e.g. an unhappy path
-        $this->assertHttpStatusCodeWhenCrawlingRenderedExample(500, 'url=');
+        self::bootKernel();
+        
+        $result = EndToEndTestHelper::createFromContainer(static::$container)->processShortcode('[text color="red"]This is red text.[/text]');
+        
+        self::assertSame('<span style="color: red;">This is red text.</span>', $result);
     }
 }
 ```
 
-## Logging
-
-When something goes wrong with the resolving of a shortcode, maybe you not only want to know which shortcode with
-which parameters caused the issue (which you can log in your resolving controller), but also which url was called
-that embedded the shortcode.
-
-This is tricky is you embed your shortcode controllers via ESI, as the ESI subrequest is in Symfony terms a master
-request, preventing you from getting your answer from RequestStack::getMasterRequest(). Hence, the
-`EmbedShortcodeHandler` logs this information in the `shortcode` channel.
-
-```xml
-<!-- src/AppBundle/Resources/config/shortcodes.xml -->
-<?xml version="1.0" ?>
-<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <services>
-        <service id="webfactory.shortcode.your-shortcode-name" parent="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler">
-            <argument index="1">AppBundle\Controller\EmbeddedImageController:showAction</argument>
-            <tag name="webfactory.shortcode" ... />
-            ...
-            
-            <argument index="3" type="service" id="monolog.logger.your_channel" />
-        </service>
-    </services>
-</container>
-```
+Assuming that your application configuration registers a handler for the `text` shortcode, which might also be a controller, this test will perform a full-stack test.
 
 ## Credits, Copyright and License
 

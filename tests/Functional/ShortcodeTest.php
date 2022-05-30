@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
+trigger_deprecation('webfactory/shortcode-bundle', '2.1.0', 'The '.ShortcodeTest::class.' class is deprecated without replacement; see the bundle README file for suggestions on how to test your shortcodes.');
+
 /**
  * Abstract template for common shortcode tests.
  */

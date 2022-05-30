@@ -7,7 +7,7 @@
         <defaults public="false" />
 
         <!-- Definition of a Shortcode HandlerContainer instance. -->
-        <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
+        <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
 
         <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser"/>
         <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser"/>
@@ -20,8 +20,8 @@
             <argument>%webfactory_shortcode.max_iterations%</argument>
         </service>
 
-        <!-- Definition of a Shortcode Processor instance. -->
-        <service id="Thunder\Shortcode\Processor\Processor">
+        <!-- Definition of a Shortcode Processor instance. Public to simplify testing – do not rely on it! -->
+        <service id="Thunder\Shortcode\Processor\Processor" public="true">
             <factory service="Webfactory\ShortcodeBundle\Factory\ProcessorFactory" method="create" />
         </service>
 
@@ -66,6 +66,12 @@
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
             <argument type="service" id="Thunder\Shortcode\Processor\Processor"/>
             <tag name="twig.extension"/>
+        </service>
+
+        <!-- Helper service for functional tests -->
+        <service id="Webfactory\ShortcodeBundle\Test\ShortcodeDefinitionTestHelper" public="true">
+            <argument type="service" id="controller_resolver" />
+            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
         </service>
 
     </services>

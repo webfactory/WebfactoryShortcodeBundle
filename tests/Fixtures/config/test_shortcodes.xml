@@ -17,5 +17,9 @@
             <tag name="webfactory.shortcode" shortcode="test-service-inline" />
         </service>
 
+        <service id="Thunder\Shortcode\Handler\PlaceholderHandler">
+            <tag name="webfactory.shortcode" shortcode="placeholder" />
+        </service>
+
     </services>
 </container>

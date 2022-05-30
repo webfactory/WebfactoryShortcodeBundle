@@ -86,4 +86,9 @@ class EmbeddedShortcodeHandler
             return "<code>&#91;$text&#93;</code>";
         }
     }
+
+    public function getControllerName(): string
+    {
+        return $this->controllerName;
+    }
 }

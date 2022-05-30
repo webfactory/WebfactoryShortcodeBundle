@@ -6,40 +6,34 @@ use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
 
 /**
- * Test that given test shortcodes are found in a Twig template and being replaced with the
- * corresponding test controller's response content.
+ * Test shortcode processing using EmbeddedShortcodeHandler and a fixture ShortodeTestController,
+ * to make sure shortcodes defined in various places (DI config, bundle config) work as expected.
  */
-class EndToEndTest extends KernelTestCase
+class EmbeddedShortcodeHandlerTest extends KernelTestCase
 {
     /** @test */
     public function paragraphs_wrapping_shortcodes_get_removed(): void
     {
-        $this->assertEquals(
-            'test',
-            $this->renderTwig("{{ '<p>[test-config-inline]</p>' | shortcodes }}")
-        );
+        self::assertSame('test', $this->processShortcodes('<p>[test-config-inline]</p>'));
     }
 
     /** @test */
     public function content_without_shortcodes_wont_be_changed(): void
     {
-        $this->assertEquals(
-            '<p>Content without shortcode</p>',
-            $this->renderTwig("{{ '<p>Content without shortcode</p>' | shortcodes }}")
-        );
+        self::assertSame('<p>Content without shortcode</p>', $this->processShortcodes('<p>Content without shortcode</p>'));
     }
 
     /**
      * @test
      * @dataProvider provideShortcodeNames
      */
-    public function expand_shortcode_in__twig(string $shortcodeName): void
+    public function expand_shortcodes_registered_in_different_ways(string $shortcodeName): void
     {
-        $result = $this->renderTwig('{{ content | shortcodes }}', ['content' => "[$shortcodeName foo=bar]"]);
-
-        self::assertSame('test foo=bar', $result);
+        // All shortcodes are set up as fixtures and use ShortcodeTestController
+        self::assertSame('test foo=bar', $this->processShortcodes("[$shortcodeName foo=bar]"));
     }
 
     public function provideShortcodeNames(): Generator
@@ -54,14 +48,12 @@ class EndToEndTest extends KernelTestCase
      * @test
      * @dataProvider provideEsiShortcodes
      */
-    public function uses__es_i_fragments(string $shortcodeName): void
+    public function processing_with__es_i_fragments(string $shortcodeName): void
     {
         $request = new Request([], [], [], [], [], ['SCRIPT_URL' => '/', 'HTTP_HOST' => 'localhost']);
         $request->headers->set('Surrogate-Capability', 'ESI/1.0');
 
-        $result = $this->renderTwig('{{ content | shortcodes }}', ['content' => "[$shortcodeName foo=bar]"], $request);
-
-        self::assertStringContainsString('<esi:include ', $result);
+        self::assertStringContainsString('<esi:include ', $this->processShortcodes("[$shortcodeName foo=bar]", $request));
     }
 
     public function provideEsiShortcodes(): Generator
@@ -70,18 +62,14 @@ class EndToEndTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
-    private function renderTwig(string $templateCode, array $context = [], Request $request = null): string
+    private function processShortcodes(string $content, Request $request = null): string
     {
         self::bootKernel();
-        $container = static::$container;
 
-        $requestStack = $container->get(RequestStack::class);
-        $requestStack->push($request ?? new Request());
+        if ($request) {
+            static::$container->get(RequestStack::class)->push($request);
+        }
 
-        $twig = $container->get('twig');
-
-        $template = $twig->createTemplate($templateCode);
-
-        return $twig->render($template, $context);
+        return EndToEndTestHelper::createFromContainer(static::$container)->processShortcode($content);
     }
 }
