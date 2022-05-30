@@ -2,7 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Test;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Thunder\Shortcode\Processor\Processor;

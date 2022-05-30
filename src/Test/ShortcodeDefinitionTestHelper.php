@@ -3,8 +3,8 @@
 namespace Webfactory\ShortcodeBundle\Test;
 
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Thunder\Shortcode\HandlerContainer\HandlerContainerInterface;
 use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 
@@ -15,7 +15,7 @@ use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 class ShortcodeDefinitionTestHelper
 {
     /**
-     * @var ControllerResolver
+     * @var ControllerResolverInterface
      */
     private $controllerResolver;
 
@@ -24,7 +24,7 @@ class ShortcodeDefinitionTestHelper
      */
     private $handlerContainer;
 
-    public function __construct(ControllerResolver $controllerResolver, HandlerContainerInterface $handlerContainer)
+    public function __construct(ControllerResolverInterface $controllerResolver, HandlerContainerInterface $handlerContainer)
     {
         $this->handlerContainer = $handlerContainer;
         $this->controllerResolver = $controllerResolver;

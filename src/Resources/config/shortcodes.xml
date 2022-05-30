@@ -9,8 +9,8 @@
         <!-- Definition of a Shortcode HandlerContainer instance. -->
         <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
 
-        <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser"/>
-        <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser"/>
+        <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser" />
+        <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser" />
 
         <service id="Webfactory\ShortcodeBundle\Factory\ProcessorFactory">
             <argument type="service" id="webfactory_shortcode.parser" />
@@ -31,14 +31,14 @@
             <call method="addListener">
                 <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
                 <argument type="service">
-                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
+                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler" />
                 </argument>
             </call>
         </service>
 
         <!-- Base definition for the EmbedForShortcodeHandler with esi renderer. -->
         <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
-            <argument type="service" id="fragment.handler"/>
+            <argument type="service" id="fragment.handler" />
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>esi</argument>
             <argument type="service" id="request_stack" />
@@ -47,11 +47,11 @@
         </service>
 
         <!-- alias for BC -->
-        <service id="webfactory.shortcode.embed_esi_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi"/>
+        <service id="webfactory.shortcode.embed_esi_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" />
 
         <!-- Base definition for the EmbedForShortcodeHandler with inline renderer. -->
         <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
-            <argument type="service" id="fragment.handler"/>
+            <argument type="service" id="fragment.handler" />
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>inline</argument>
             <argument type="service" id="request_stack" />
@@ -60,12 +60,12 @@
         </service>
 
         <!-- alias for BC -->
-        <service id="webfactory.shortcode.embed_inline_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline"/>
+        <service id="webfactory.shortcode.embed_inline_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" />
 
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
-            <argument type="service" id="Thunder\Shortcode\Processor\Processor"/>
-            <tag name="twig.extension"/>
+            <argument type="service" id="Thunder\Shortcode\Processor\Processor" />
+            <tag name="twig.extension" />
         </service>
 
         <!-- Helper service for functional tests -->
