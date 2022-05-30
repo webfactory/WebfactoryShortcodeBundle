@@ -29,8 +29,8 @@ abstract class ShortcodeTest extends WebTestCase
             throw new PHPUnit_Framework_IncompleteTestError('Albeit being a '.__CLASS__.', '.static::class.' does not define a shortcode to test.');
         }
 
-        static::bootKernel();
         $this->client = static::createClient();
+        static::bootKernel();
     }
 
     /**
