@@ -12,7 +12,7 @@ class ShortcodeExtensionTest extends KernelTestCase
     /**
      * @test
      */
-    public function resolve__placeholder_shortcode_in__twig(): void
+    public function resolve_placeholder_shortcode_in_twig(): void
     {
         self::assertSame('News from year 1970.', $this->renderTemplate('{% apply shortcodes %}[placeholder year=1970]News from year %year%.[/placeholder]{% endapply %}'));
     }
@@ -20,7 +20,7 @@ class ShortcodeExtensionTest extends KernelTestCase
     /**
      * @test
      */
-    public function filter_returns_safe__html(): void
+    public function filter_returns_safe_html(): void
     {
         self::assertSame('<p>HTML</p>', $this->renderTemplate('{{ "<p>HTML</p>" | shortcodes }}'));
     }

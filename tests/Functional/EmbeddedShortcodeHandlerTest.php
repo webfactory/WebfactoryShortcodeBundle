@@ -48,7 +48,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
      * @test
      * @dataProvider provideEsiShortcodes
      */
-    public function processing_with__es_i_fragments(string $shortcodeName): void
+    public function processing_with_esi_fragments(string $shortcodeName): void
     {
         $request = new Request([], [], [], [], [], ['SCRIPT_URL' => '/', 'HTTP_HOST' => 'localhost']);
         $request->headers->set('Surrogate-Capability', 'ESI/1.0');
