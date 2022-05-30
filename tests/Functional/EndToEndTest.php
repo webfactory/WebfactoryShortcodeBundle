@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Test that given test shortcodes are found in a Twig template and being replaced with the
  * corresponding test controller's response content.
  */
-class EndToEndTest extends KernelTestCase
+final class EndToEndTest extends KernelTestCase
 {
     /** @test */
     public function paragraphs_wrapping_shortcodes_get_removed(): void
@@ -54,7 +54,7 @@ class EndToEndTest extends KernelTestCase
      * @test
      * @dataProvider provideEsiShortcodes
      */
-    public function uses__es_i_fragments(string $shortcodeName): void
+    public function uses_esi_fragments(string $shortcodeName): void
     {
         $request = new Request([], [], [], [], [], ['SCRIPT_URL' => '/', 'HTTP_HOST' => 'localhost']);
         $request->headers->set('Surrogate-Capability', 'ESI/1.0');

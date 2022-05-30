@@ -5,11 +5,12 @@ namespace Webfactory\ShortcodeBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Environment;
 
 /**
  * Guide for the configured shortcodes showing a list overview and detail pages with the rendered shortcode.
  */
-class GuideController
+final class GuideController
 {
     private $twig;
 
@@ -26,6 +27,9 @@ class GuideController
      */
     private $shortcodeTags;
 
+    /**
+     * @param \Twig_Environment|Environment $twig
+     */
     public function __construct(array $shortcodeTags, $twig)
     {
         $this->shortcodeTags = $shortcodeTags;
