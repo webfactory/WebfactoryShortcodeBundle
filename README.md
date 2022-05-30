@@ -9,7 +9,7 @@ It allows you to define shortcodes and their replacements in a jiffy. Shortcodes
 [text color="red"]This is red text.[/text]
 ```
 
-In analogy to living style guides, this bundle also provides an optional shortcode guide. This guide provides a list of all registered shortcodes with an optional description and examples.
+In analogy to living style guides, this bundle provides a shortcode guide that lists all registered shortcodes with an optional description and example.
  
 ## Installation
 
