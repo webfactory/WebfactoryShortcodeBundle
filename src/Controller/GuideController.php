@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Environment;
+use Twig_Environment;
 
 /**
  * Guide for the configured shortcodes showing a list overview and detail pages with the rendered shortcode.
@@ -28,7 +29,7 @@ final class GuideController
     private $shortcodeTags;
 
     /**
-     * @param \Twig_Environment|Environment $twig
+     * @param Twig_Environment|Environment $twig
      */
     public function __construct(array $shortcodeTags, $twig)
     {
