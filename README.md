@@ -95,6 +95,10 @@ services:
             - { name: 'webfactory.shortcode', shortcode: 'my-shortcode-name' }
 ```
 
+### Removing `<p>` Tags around Shortcodes
+
+By default, the `RemoveWrappingParagraphElementsEventHandler` contained in this bundle will be used to remove `<p>...</p>` tags around shortcodes, if the shortcode is the only text content in that paragraph. 
+
 ## Activating the Shortcode Guide
 
 The optional Shortcode Guide is a controller providing an overview page of all configured shortcodes. For every shortcode, there is also a detail page including a rendered example. 
