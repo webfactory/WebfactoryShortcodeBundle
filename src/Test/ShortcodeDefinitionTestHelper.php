@@ -40,7 +40,10 @@ class ShortcodeDefinitionTestHelper
         return $this->handlerContainer->get($shortcode);
     }
 
-    public function resolveShortcodeController(string $shortcode): callable
+    /**
+     * @return callable-array
+     */
+    public function resolveShortcodeController(string $shortcode): array
     {
         $handler = $this->handlerContainer->get($shortcode);
 
