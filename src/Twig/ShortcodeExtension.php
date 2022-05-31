@@ -19,7 +19,7 @@ final class ShortcodeExtension extends AbstractExtension
         $this->processor = $processor;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('shortcodes', [$this, 'processShortcodes'], ['is_safe' => ['html']]),
