@@ -4,25 +4,25 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults public="false"/>
+        <defaults public="false" />
 
         <!-- Definition of a Shortcode HandlerContainer instance. -->
-        <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
+        <service id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
 
-        <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser"/>
-        <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser"/>
+        <service id="webfactory_shortcode.regular_parser" class="Thunder\Shortcode\Parser\RegularParser" />
+        <service id="webfactory_shortcode.regex_parser" class="Thunder\Shortcode\Parser\RegexParser" />
 
         <service id="Webfactory\ShortcodeBundle\Factory\ProcessorFactory">
-            <argument type="service" id="webfactory_shortcode.parser"/>
-            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
-            <argument type="service" id="Thunder\Shortcode\EventContainer\EventContainer"/>
+            <argument type="service" id="webfactory_shortcode.parser" />
+            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
+            <argument type="service" id="Thunder\Shortcode\EventContainer\EventContainer" />
             <argument>%webfactory_shortcode.recursion_depth%</argument>
             <argument>%webfactory_shortcode.max_iterations%</argument>
         </service>
 
         <!-- Definition of a Shortcode Processor instance. Public to simplify testing – do not rely on it! -->
         <service id="Thunder\Shortcode\Processor\Processor" public="true">
-            <factory service="Webfactory\ShortcodeBundle\Factory\ProcessorFactory" method="create"/>
+            <factory service="Webfactory\ShortcodeBundle\Factory\ProcessorFactory" method="create" />
         </service>
 
         <!-- Definition of a Shortcode EventContainer instance. -->
@@ -31,47 +31,47 @@
             <call method="addListener">
                 <argument type="constant">\Thunder\Shortcode\Events::REPLACE_SHORTCODES</argument>
                 <argument type="service">
-                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler"/>
+                    <service class="Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler" />
                 </argument>
             </call>
         </service>
 
         <!-- Base definition for the EmbedForShortcodeHandler with esi renderer. -->
         <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
-            <argument type="service" id="fragment.handler"/>
+            <argument type="service" id="fragment.handler" />
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>esi</argument>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="logger" on-invalid="null"/>
-            <tag name="monolog.logger" channel="shortcode"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" on-invalid="null" />
+            <tag name="monolog.logger" channel="shortcode" />
         </service>
 
         <!-- alias for BC -->
-        <service id="webfactory.shortcode.embed_esi_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi"/>
+        <service id="webfactory.shortcode.embed_esi_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi" />
 
         <!-- Base definition for the EmbedForShortcodeHandler with inline renderer. -->
         <service abstract="true" id="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" class="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler" lazy="true">
-            <argument type="service" id="fragment.handler"/>
+            <argument type="service" id="fragment.handler" />
             <argument><!-- Controller name placeholder argument --></argument>
             <argument>inline</argument>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="logger" on-invalid="null"/>
-            <tag name="monolog.logger" channel="shortcode"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" on-invalid="null" />
+            <tag name="monolog.logger" channel="shortcode" />
         </service>
 
         <!-- alias for BC -->
-        <service id="webfactory.shortcode.embed_inline_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline"/>
+        <service id="webfactory.shortcode.embed_inline_for_shortcode_handler" alias="Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.inline" />
 
         <!-- Twig extension providing the |shortcodes filter. The content will be passed to the Shortcode Processor. -->
         <service id="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension" class="Webfactory\ShortcodeBundle\Twig\ShortcodeExtension">
-            <argument type="service" id="Thunder\Shortcode\Processor\Processor"/>
-            <tag name="twig.extension"/>
+            <argument type="service" id="Thunder\Shortcode\Processor\Processor" />
+            <tag name="twig.extension" />
         </service>
 
         <!-- Helper service for functional tests -->
         <service id="Webfactory\ShortcodeBundle\Test\ShortcodeDefinitionTestHelper" public="true">
-            <argument type="service" id="controller_resolver"/>
-            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer"/>
+            <argument type="service" id="controller_resolver" />
+            <argument type="service" id="Thunder\Shortcode\HandlerContainer\HandlerContainer" />
         </service>
 
     </services>
