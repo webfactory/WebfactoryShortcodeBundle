@@ -8,7 +8,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Webfactory\ShortcodeBundle\WebfactoryShortcodeBundle;
 
-class TestKernel extends Kernel
+final class TestKernel extends Kernel
 {
     public function registerBundles(): array
     {

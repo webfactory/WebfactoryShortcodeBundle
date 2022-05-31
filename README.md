@@ -9,7 +9,7 @@ It allows you to define shortcodes and their replacements in a jiffy. Shortcodes
 [text color="red"]This is red text.[/text]
 ```
 
-In analogy to living style guides, this bundle also provides an optional shortcode guide. This guide provides a list of all registered shortcodes with an optional description and examples.
+In analogy to living style guides, this bundle provides a shortcode guide that lists all registered shortcodes with an optional description and example.
  
 ## Installation
 
@@ -46,17 +46,6 @@ The bundle will set up a `shortcodes` Twig filter. What you pass through this fi
 {{ some_content |shortcodes }}
 ```
 
-### Registering Handlers
-
-In the [thunderer/Shortcode](https://github.com/thunderer/Shortcode) package, _handlers_ transform shortcodes into desired replacements. You can register services from the Symfony Dependency Injection Container to be used as shortcode handlers by tagging them with `webfactory.shortcode` and adding a `shortcode` attribute to the tag indicating the shortcode name.
-
-```yaml
-services:
-    My\Shortcode\Handler\Service:
-        tags:
-            - { name: 'webfactory.shortcode', shortcode: 'my-shortcode-name' }
-```
-
 ### Using Controllers as Shortcode Handlers
 
 This bundle comes with a helper class that allows to use Symfony's [Fragment Sub-Framework](https://symfony.com/blog/new-in-symfony-2-2-the-new-fragment-sub-framework) and the technique of [embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers) to have controllers generate the replacement output for shortcodes.
@@ -67,22 +56,22 @@ To give an example, assume the following configuration:
 # config.yml
 webfactory_shortcodes:
     shortcodes:
-        image: AppBundle\Controller\EmbeddedImageController::showAction
+        image: AppBundle\Controller\EmbeddedImageController::show
 ```
 
 Then, when doing something like this in Twig:
 
 ```twig
-{# Example content #}
-{% set content = '[image url="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]' %}
-{{ content |shortcodes }}
+{{ '[image url="https://upload.wikimedia.org/wikipedia/en/f/f7/RickRoll.png"]' |shortcodes }}
 ```
 
-... the `AppBundle\Controller\EmbeddedImageController::showAction()` controller method will be called. Additional shortcode attributes, like `url` in the above example, will be passed as parameters to the controller. The response returned by the controller will be used to replace the shortcode in the given content. The controller can generate the response directly, or use Twig to render a template to create it. 
+... the `AppBundle\Controller\EmbeddedImageController::show()` controller method will be called. Additional shortcode attributes, like `url` in the above example, will be passed as parameters to the controller. The response returned by the controller will be used to replace the shortcode in the given content. The controller can generate the response directly, or use Twig to render a template to create it. 
 
 #### Rendering with Edge Side Includes
 
 You can also use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html) for particular shortcodes. The advantage of ESI is that single shortcode replacements can be stored in edge caches and/or reverse proxies like Varnish and possibly be reused on multiple pages.
+
+⚠️ Take care: Due to the way ESI works, the (master) `Request` visible to controllers is no longer the one where the shortcode was used. Keep that in mind wehn you, for example, want to log the URLs where shortcodes are beiung used.
 
 To use ESI-based embedding for a particular shortcode, use the following configuration:
 
@@ -95,13 +84,28 @@ webfactory_shortcodes:
             method: esi
 ```
 
+### Registering Handlers as Services 
+
+In the [thunderer/Shortcode](https://github.com/thunderer/Shortcode) package, _handlers_ transform shortcodes into desired replacements. You can register services from the Symfony Dependency Injection Container to be used as shortcode handlers by tagging them with `webfactory.shortcode` and adding a `shortcode` attribute to the tag indicating the shortcode name.
+
+```yaml
+services:
+    My\Shortcode\Handler\Service:
+        tags:
+            - { name: 'webfactory.shortcode', shortcode: 'my-shortcode-name' }
+```
+
+### Removing `<p>` Tags around Shortcodes
+
+By default, the `RemoveWrappingParagraphElementsEventHandler` contained in this bundle will be used to remove `<p>...</p>` tags around shortcodes, if the shortcode is the only text content in that paragraph. 
+
 ## Activating the Shortcode Guide
 
 The optional Shortcode Guide is a controller providing an overview page of all configured shortcodes. For every shortcode, there is also a detail page including a rendered example. 
 
 To use the Shortcode Guide, include the routing configuration from `@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml`.
 
-⚠️ You probably want to do this only for your Symfony `dev` environment and/or additionally restrict access in your security configuration.
+⚠️ You probably want to do this only for your Symfony `dev` and/or `test` environment, and possibly restrict access in your security configuration in addition to that.
 
 ```yaml
 # src/routing.yml
@@ -125,7 +129,7 @@ webfactory_shortcodes:
 ### Other Configuration Parameters
 
 In most cases, the default values should work fine. But you might want to configure something else, e.g. if the default
-parser needs too much memory for a large snippet. See Thunderer's documentation on [parsing](https://github.com/thunderer/Shortcode#parsing)
+parser needs too much memory for a large snippet. See thunderer's documentation on [parsing](https://github.com/thunderer/Shortcode#parsing)
 and [configuration](https://github.com/thunderer/Shortcode#configuration) so you understand the advantages,
 disadvantages and limitations:
 
