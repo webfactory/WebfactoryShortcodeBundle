@@ -7,7 +7,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('webfactory_shortcode');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('webfactory_shortcode');
@@ -29,7 +29,19 @@ class Configuration implements ConfigurationInterface
                     ->info('Limit the number of iterations when resolving shortcodes')
                     ->defaultValue(null)
                 ->end()
-        ;
+                ->arrayNode('shortcodes')
+                    ->normalizeKeys(false)
+                    ->arrayPrototype()
+                        ->beforeNormalization()
+                            ->ifString()->then(static function ($v) {
+                                return ['controller' => $v];
+                            })
+                            ->end()
+                        ->children()
+                            ->scalarNode('controller')->isRequired()->end()
+                            ->enumNode('method')->values(['esi', 'inline'])->defaultValue('inline')->end()
+                            ->scalarNode('description')->defaultNull()->end()
+                            ->scalarNode('example')->defaultNull()->end();
 
         return $treeBuilder;
     }

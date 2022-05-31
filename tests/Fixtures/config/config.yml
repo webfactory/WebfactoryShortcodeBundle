@@ -1,6 +1,20 @@
 framework:
     secret: top-secret
     test: true
+    esi: { enabled: true }
+    fragments: { enabled: true }
+    router: { resource: "%kernel.project_dir%/src/Resources/config/guide-routing.xml" }
 
 twig:
     strict_variables: true
+
+webfactory_shortcode:
+    shortcodes:
+        test-config-inline: 'Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::test'
+        test-config-esi:
+            controller: 'Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::test'
+            method: esi
+        test-shortcode-guide:
+            controller: 'Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::test'
+            description: "Description for the 'test-shortcode-guide' shortcode"
+            example: "test-shortcode-guide test=true"

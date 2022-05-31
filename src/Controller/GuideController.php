@@ -2,15 +2,19 @@
 
 namespace Webfactory\ShortcodeBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Environment;
+use Twig_Environment;
 
 /**
  * Guide for the configured shortcodes showing a list overview and detail pages with the rendered shortcode.
  */
 final class GuideController
 {
+    private $twig;
+
     /**
      * @var array
      *
@@ -24,29 +28,21 @@ final class GuideController
      */
     private $shortcodeTags;
 
-    public function __construct(array $shortcodeTags)
+    /**
+     * @param Twig_Environment|Environment $twig
+     */
+    public function __construct(array $shortcodeTags, $twig)
     {
         $this->shortcodeTags = $shortcodeTags;
+        $this->twig = $twig;
     }
 
-    /**
-     * @Template(template="@WebfactoryShortcode/Guide/list.html.twig")
-     *
-     * @return array
-     */
-    public function listAction()
+    public function listAction(): Response
     {
-        return [
-            'shortcodeTags' => $this->shortcodeTags,
-        ];
+        return new Response($this->twig->render('@WebfactoryShortcode/Guide/list.html.twig', ['shortcodeTags' => $this->shortcodeTags]));
     }
 
-    /**
-     * @Template(template="@WebfactoryShortcode/Guide/detail.html.twig")
-     *
-     * @return array
-     */
-    public function detailAction($shortcode, Request $request)
+    public function detailAction($shortcode, Request $request): Response
     {
         foreach ($this->shortcodeTags as $shortcodeTag) {
             if ($shortcodeTag['shortcode'] === $shortcode) {
@@ -56,9 +52,7 @@ final class GuideController
                     $shortcodeTag['example'] = $shortcode.' '.$customParameters;
                 }
 
-                return [
-                    'shortcodeTag' => $shortcodeTag,
-                ];
+                return new Response($this->twig->render('@WebfactoryShortcode/Guide/detail.html.twig', ['shortcodeTag' => $shortcodeTag]));
             }
         }
 

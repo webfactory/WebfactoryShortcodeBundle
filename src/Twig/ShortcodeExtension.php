@@ -26,12 +26,7 @@ final class ShortcodeExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    public function processShortcodes($content)
+    public function processShortcodes(string $content): string
     {
         return $this->processor->process($content);
     }
