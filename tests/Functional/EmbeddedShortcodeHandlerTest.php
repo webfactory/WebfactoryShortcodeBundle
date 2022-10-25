@@ -28,6 +28,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
 
     /**
      * @test
+     *
      * @dataProvider provideShortcodeNames
      */
     public function expand_shortcodes_registered_in_different_ways(string $shortcodeName): void
@@ -46,6 +47,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
 
     /**
      * @test
+     *
      * @dataProvider provideEsiShortcodes
      */
     public function processing_with_esi_fragments(string $shortcodeName): void
