@@ -33,6 +33,7 @@ final class EndToEndTest extends KernelTestCase
 
     /**
      * @test
+     *
      * @dataProvider provideShortcodeNames
      */
     public function expand_shortcode_in__twig(string $shortcodeName): void
@@ -52,6 +53,7 @@ final class EndToEndTest extends KernelTestCase
 
     /**
      * @test
+     *
      * @dataProvider provideEsiShortcodes
      */
     public function uses_esi_fragments(string $shortcodeName): void
