@@ -28,7 +28,7 @@ class ShortcodeExtensionTest extends KernelTestCase
     private function renderTemplate(string $template): string
     {
         self::bootKernel();
-        $container = static::$container;
+        $container = static::getContainer();
 
         $twig = $container->get('twig');
 

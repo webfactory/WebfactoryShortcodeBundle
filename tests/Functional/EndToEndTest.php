@@ -75,7 +75,7 @@ final class EndToEndTest extends KernelTestCase
     private function renderTwig(string $templateCode, array $context = [], Request $request = null): string
     {
         self::bootKernel();
-        $container = static::$container;
+        $container = static::getContainer();
 
         $requestStack = $container->get(RequestStack::class);
         $requestStack->push($request ?? new Request());
