@@ -21,8 +21,8 @@ jobs:
                 with:
                   php-version: ${{ env.PHP_VERSION }}
                   tools: composer:v2
-            -   uses: actions/checkout@v2
-            -   uses: actions/cache@v2
+            -   uses: actions/checkout@v3
+            -   uses: actions/cache@v3
                 with:
                     path: vendor
                     key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}

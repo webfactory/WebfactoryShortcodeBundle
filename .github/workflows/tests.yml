@@ -22,12 +22,12 @@ jobs:
                     - { php-version: 8.1, symfony-locked-version: none, dependency-version: prefer-stable }
         name: PHPUnit (PHP ${{matrix.php-version}}, Symfony Version Lock ${{ matrix.symfony-locked-version }}, ${{ matrix.dependency-version }})
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
             -   uses: shivammathur/setup-php@v2
                 with:
                   php-version: ${{ matrix.php-version }}
                   tools: composer:v2
-            -   uses: actions/cache@v2
+            -   uses: actions/cache@v3
                 with:
                     path: vendor
                     key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}

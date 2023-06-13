@@ -48,7 +48,7 @@ abstract class ShortcodeTest extends WebTestCase
     /**
      * @param array|string|null $customParameters use of strings is deprecated, use array instead.
      */
-    protected function crawlRenderedExample(/*array*/ $customParameters = null): Crawler
+    protected function crawlRenderedExample(/* array */ $customParameters = null): Crawler
     {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
@@ -68,7 +68,7 @@ abstract class ShortcodeTest extends WebTestCase
      */
     protected function assertHttpStatusCodeWhenCrawlingRenderedExample(
         int $expectedStatusCode,
-        /*array*/ $customParameters = null
+        /* array */ $customParameters = null
     ): Crawler {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 
@@ -81,7 +81,7 @@ abstract class ShortcodeTest extends WebTestCase
      *
      * @return Crawler
      */
-    private function getUrlWithRenderedExample(/*array*/ $customParameters = null): string
+    private function getUrlWithRenderedExample(/* array */ $customParameters = null): string
     {
         $urlParameters = ['shortcode' => $this->getShortcodeToTest()];
 
