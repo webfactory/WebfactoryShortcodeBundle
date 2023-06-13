@@ -29,4 +29,4 @@ jobs:
                     restore-keys: |
                         composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
             -   run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
-            -   uses: docker://webfactory/composer-require-checker:3.2.0
+            -   uses: docker://ghcr.io/webfactory/composer-require-checker:4.6.0
