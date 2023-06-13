@@ -72,6 +72,6 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
             static::getContainer()->get(RequestStack::class)->push($request);
         }
 
-        return EndToEndTestHelper::createFromContainer(static::$container)->processShortcode($content);
+        return EndToEndTestHelper::createFromContainer(static::getContainer())->processShortcode($content);
     }
 }
