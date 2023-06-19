@@ -19,7 +19,7 @@ class ShortcodeDefinitionTestHelperTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->helper = static::$container->get(ShortcodeDefinitionTestHelper::class);
+        $this->helper = static::getContainer()->get(ShortcodeDefinitionTestHelper::class);
     }
 
     /**

@@ -90,7 +90,7 @@ abstract class ShortcodeTest extends WebTestCase
             $urlParameters['customParameters'] = $customParametersAsString;
         }
 
-        return static::$container->get('router')->generate('webfactory.shortcode.guide-detail', $urlParameters);
+        return static::getContainer()->get('router')->generate('webfactory.shortcode.guide-detail', $urlParameters);
     }
 
     private function getCustomParametersAsString($customParametersAsMixed): ?string
