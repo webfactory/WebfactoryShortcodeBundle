@@ -2,6 +2,9 @@
 
 namespace Webfactory\ShortcodeBundle\Controller;
 
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -13,8 +16,6 @@ use Twig_Environment;
  */
 final class GuideController
 {
-    private $twig;
-
     /**
      * @var array
      *
@@ -29,12 +30,23 @@ final class GuideController
     private $shortcodeTags;
 
     /**
+     * @var Environment|Twig_Environment
+     */
+    private $twig;
+
+    /**
+     * @var ?FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
      * @param Twig_Environment|Environment $twig
      */
-    public function __construct(array $shortcodeTags, $twig)
+    public function __construct(array $shortcodeTags, $twig, FormFactoryInterface $formFactory = null)
     {
-        $this->shortcodeTags = $shortcodeTags;
+        $this->shortcodeTags = array_combine(array_map(function (array $definition): string { return $definition['shortcode']; }, $shortcodeTags), $shortcodeTags);
         $this->twig = $twig;
+        $this->formFactory = $formFactory;
     }
 
     public function listAction(): Response
@@ -42,20 +54,44 @@ final class GuideController
         return new Response($this->twig->render('@WebfactoryShortcode/Guide/list.html.twig', ['shortcodeTags' => $this->shortcodeTags]));
     }
 
-    public function detailAction($shortcode, Request $request): Response
+    public function detailAction(string $shortcode, Request $request): Response
     {
-        foreach ($this->shortcodeTags as $shortcodeTag) {
-            if ($shortcodeTag['shortcode'] === $shortcode) {
-                // if custom parameters are provided, replace the example
-                $customParameters = $request->get('customParameters');
-                if ($customParameters) {
-                    $shortcodeTag['example'] = $shortcode.' '.$customParameters;
-                }
-
-                return new Response($this->twig->render('@WebfactoryShortcode/Guide/detail.html.twig', ['shortcodeTag' => $shortcodeTag]));
-            }
+        if (!isset($this->shortcodeTags[$shortcode])) {
+            throw new NotFoundHttpException();
         }
 
-        throw new NotFoundHttpException();
+        $shortcodeTag = $this->shortcodeTags[$shortcode];
+
+        // if custom parameters are provided, replace the example
+        $customParameters = $request->get('customParameters');
+        if ($customParameters) {
+            $shortcodeTag['example'] = $shortcode.' '.$customParameters;
+        }
+
+        $example = '[' . ($shortcodeTag['example'] ?? $shortcode ) . ']';
+
+        if ($this->formFactory) {
+            $formBuilder = $this->formFactory->createBuilder(FormType::class, ['example' => $example], ['method' => 'GET']);
+            $formBuilder->add('example', TextareaType::class);
+            $form = $formBuilder->getForm();
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted()) {
+                $example = $form->getData()['example'];
+            }
+        } else {
+            $form = null;
+        }
+
+        return new Response(
+            $this->twig->render(
+                '@WebfactoryShortcode/Guide/detail.html.twig', [
+                    'shortcodeTag' => $shortcodeTag,
+                    'example' => $example,
+                    'form' => $form ? $form->createView() : null,
+                ]
+            )
+        );
     }
 }

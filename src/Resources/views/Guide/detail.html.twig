@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Shortcode {{ shortcodeTag.shortcode }}</h1>
+    <h1>Shortcode preview</h1>
+    <p><b><tt>[{{ shortcodeTag.shortcode }}]</tt></b></p>
     <p>
         {% if shortcodeTag.description is defined %}
             {{ shortcodeTag.description }}
@@ -14,17 +15,24 @@
         {% endif %}
     </p>
 
-    <h2>Example</h2>
-    {% if shortcodeTag.example is defined %}
-        <p>[{{ shortcodeTag.example }}] becomes:</p>
-        <div id="rendered-example">
-            {{ ('[' ~ shortcodeTag.example ~ ']') |shortcodes }}
-        </div>
+    <p>
+        <a href="{{ path('webfactory.shortcode.guide-list') }}">Back to the shortcodes list</a>
+    </p>
+
+    {% if form %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Show example" />
+        {{ form_end(form) }}
+    {% elseif shortcodeTag.example is defined %}
+        <p>Example code: {{ example }}</p>
     {% else %}
         <p>No example configured.</p>
     {% endif %}
 
-    <p>
-        <a href="{{ path('webfactory.shortcode.guide-list') }}">Back to the shortcodes list</a>
-    </p>
+    {% if shortcodeTag.example is defined %}
+        <div id="rendered-example">
+            {{ example|shortcodes }}
+        </div>
+    {% endif %}
 {% endblock %}
