@@ -54,7 +54,7 @@ To give an example, assume the following configuration:
 
 ```yaml
 # config.yml
-webfactory_shortcodes:
+webfactory_shortcode:
     shortcodes:
         image: AppBundle\Controller\EmbeddedImageController::show
 ```
@@ -243,4 +243,4 @@ This bundle was started at webfactory GmbH, Bonn.
 - <https://www.webfactory.de>
 - <https://twitter.com/webfactory>
 
-Copyright 2018-2022 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
+Copyright 2018-2023 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
