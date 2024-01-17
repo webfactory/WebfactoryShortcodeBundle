@@ -26,14 +26,14 @@
                             {% if shortcodeTag.description is defined %}
                                 {{ shortcodeTag.description }}
                             {% else %}
-                                No description configured
+                                No description available
                             {% endif %}
                         </td>
                         <td>
                             {% if shortcodeTag.example is defined %}
                                 [{{ shortcodeTag.example }}]
                             {% else %}
-                                No example configured
+                                No example available
                             {% endif %}
                         </td>
                     </tr>
@@ -42,6 +42,6 @@
         </table>
     {% else %}
         <p>No shortcodes configured.</p>
-        <p>See the <a href="https://github.com/webfactory/WebfactoryShortcodeBundle/blob/master/README.md">README.md of the WebfactoryShortcodeBundle</a> to configure some.</p>
+        <p>See the <a href="https://github.com/webfactory/WebfactoryShortcodeBundle/blob/master/README.md">WebfactoryShortcodeBundle README.md</a> on how to configure this documentation.</p>
     {% endif %}
 {% endblock %}
