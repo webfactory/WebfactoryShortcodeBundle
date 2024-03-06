@@ -20,6 +20,7 @@ jobs:
             -   uses: shivammathur/setup-php@v2
                 with:
                   php-version: ${{ env.PHP_VERSION }}
+                  coverage: none
                   tools: composer:v2
             -   uses: actions/checkout@v3
             -   uses: actions/cache@v3
