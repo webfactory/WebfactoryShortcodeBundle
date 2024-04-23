@@ -19,3 +19,8 @@ webfactory_shortcode:
             description: "Description for the 'test-shortcode-guide' shortcode"
             example: "test-shortcode-guide test=true"
         test-config-invalid-controller: 'Foo\Bar::baz'
+
+services:
+    Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\:
+        resource: '../Controller/'
+        tags: [ 'controller.service_arguments' ]
