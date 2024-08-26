@@ -34,16 +34,15 @@ class EmbeddedShortcodeHandler
     private $requestStack;
 
     /**
-     * @param string          $controllerName
-     * @param string          $renderer
-     * @param LoggerInterface $logger
+     * @param string $controllerName
+     * @param string $renderer
      */
     public function __construct(
         FragmentHandler $fragmentHandler,
         $controllerName,
         $renderer,
         RequestStack $requestStack,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->fragmentHandler = $fragmentHandler;
         $this->controllerName = $controllerName;

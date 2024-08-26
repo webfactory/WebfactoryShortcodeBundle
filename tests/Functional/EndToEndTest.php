@@ -72,7 +72,7 @@ final class EndToEndTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
-    private function renderTwig(string $templateCode, array $context = [], Request $request = null): string
+    private function renderTwig(string $templateCode, array $context = [], ?Request $request = null): string
     {
         self::bootKernel();
         $container = static::getContainer();
