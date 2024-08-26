@@ -64,7 +64,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
-    private function processShortcodes(string $content, Request $request = null): string
+    private function processShortcodes(string $content, ?Request $request = null): string
     {
         self::bootKernel();
 

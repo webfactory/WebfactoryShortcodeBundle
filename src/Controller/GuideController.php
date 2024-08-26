@@ -42,7 +42,7 @@ final class GuideController
     /**
      * @param Twig_Environment|Environment $twig
      */
-    public function __construct(array $shortcodeTags, $twig, FormFactoryInterface $formFactory = null)
+    public function __construct(array $shortcodeTags, $twig, ?FormFactoryInterface $formFactory = null)
     {
         $this->shortcodeTags = array_combine(array_map(function (array $definition): string { return $definition['shortcode']; }, $shortcodeTags), $shortcodeTags);
         $this->twig = $twig;
