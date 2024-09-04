@@ -13,7 +13,7 @@ use Webfactory\ShortcodeBundle\Controller\GuideController;
  */
 class ShortcodeCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $shortcodeServices = $container->findTaggedServiceIds('webfactory.shortcode');
 
