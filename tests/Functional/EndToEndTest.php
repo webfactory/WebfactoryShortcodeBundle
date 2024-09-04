@@ -43,7 +43,7 @@ final class EndToEndTest extends KernelTestCase
         self::assertSame('test foo=bar', $result);
     }
 
-    public function provideShortcodeNames(): Generator
+    public static function provideShortcodeNames(): Generator
     {
         yield 'Inline shortcode defined in bundle config' => ['test-config-inline'];
         yield 'ESI-based shortcode defined in bundle config' => ['test-config-esi'];
@@ -66,7 +66,7 @@ final class EndToEndTest extends KernelTestCase
         self::assertStringContainsString('<esi:include ', $result);
     }
 
-    public function provideEsiShortcodes(): Generator
+    public static function provideEsiShortcodes(): Generator
     {
         yield 'ESI-based shortcode defined in bundle configuration' => ['test-config-esi'];
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
