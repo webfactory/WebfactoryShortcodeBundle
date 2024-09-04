@@ -46,17 +46,12 @@ final class ShortcodeCompilerPassTest extends TestCase
             ]);
 
         $mockedShortcodeHandlerContainer = $this->createMock(Definition::class);
-        $mockedShortcodeHandlerContainer->expects($this->at(0))
+        $mockedShortcodeHandlerContainer->expects($this->exactly(2))
             ->method('addMethodCall')
             ->with('add', $this->callback(function (array $argument) {
-                return 'shortcode1' === $argument[0]
-                    && $argument[1] instanceof Reference;
-            }));
-        $mockedShortcodeHandlerContainer->expects($this->at(1))
-            ->method('addMethodCall')
-            ->with('add', $this->callback(function ($argument) {
-                return 'shortcode2' === $argument[0]
-                    && $argument[1] instanceof Reference;
+                static $count = 0;
+                ++$count;
+                return 'shortcode'.$count === $argument[0] && $argument[1] instanceof Reference;
             }));
 
         $this->containerBuilder->expects($this->once())
