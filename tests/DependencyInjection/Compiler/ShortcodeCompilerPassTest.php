@@ -51,6 +51,7 @@ final class ShortcodeCompilerPassTest extends TestCase
             ->with('add', $this->callback(function (array $argument) {
                 static $count = 0;
                 ++$count;
+
                 return 'shortcode'.$count === $argument[0] && $argument[1] instanceof Reference;
             }));
 
