@@ -41,7 +41,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         self::assertSame('test foo=bar', $this->processShortcodes("[$shortcodeName foo=bar]"));
     }
 
-    public function provideShortcodeNames(): Generator
+    public static function provideShortcodeNames(): Generator
     {
         yield 'Inline shortcode defined in bundle config' => ['test-config-inline'];
         yield 'ESI-based shortcode defined in bundle config' => ['test-config-esi'];
@@ -62,7 +62,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         self::assertStringContainsString('<esi:include ', $this->processShortcodes("[$shortcodeName foo=bar]", $request));
     }
 
-    public function provideEsiShortcodes(): Generator
+    public static function provideEsiShortcodes(): Generator
     {
         yield 'ESI-based shortcode defined in bundle configuration' => ['test-config-esi'];
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
