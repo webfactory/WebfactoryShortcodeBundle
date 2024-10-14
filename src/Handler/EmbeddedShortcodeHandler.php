@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Handler;
 
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,11 +39,11 @@ class EmbeddedShortcodeHandler
         string $controllerName,
         string $renderer,
         RequestStack $requestStack,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $callableFragments = explode('::', $controllerName);
-        if (!is_array($callableFragments) || !isset($callableFragments[1]) || !method_exists($callableFragments[0], $callableFragments[1])) {
-            throw new \InvalidArgumentException('The controller method: "'.$controllerName.'" does not exist.');
+        if (!\is_array($callableFragments) || !isset($callableFragments[1]) || !method_exists($callableFragments[0], $callableFragments[1])) {
+            throw new InvalidArgumentException('The controller method: "'.$controllerName.'" does not exist.');
         }
 
         $this->fragmentHandler = $fragmentHandler;

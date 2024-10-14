@@ -3,6 +3,7 @@
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Generator;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -89,7 +90,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
      */
     public function validate_invalid_controller_names(string $controllerName): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new EmbeddedShortcodeHandler($this->createMock(FragmentHandler::class), $controllerName, 'inline', $this->createMock(RequestStack::class));
     }
@@ -102,7 +103,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'Not existing method' => [GuideController::class.'_notExistingMethod'];
     }
 
-    private function processShortcodes(string $content, Request $request = null): string
+    private function processShortcodes(string $content, ?Request $request = null): string
     {
         self::bootKernel();
 
