@@ -6,6 +6,9 @@ use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Webfactory\ShortcodeBundle\Controller\GuideController;
+use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
 
 /**
@@ -37,7 +40,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         self::assertSame('test foo=bar', $this->processShortcodes("[$shortcodeName foo=bar]"));
     }
 
-    public static function provideShortcodeNames(): Generator
+    public function provideShortcodeNames(): Generator
     {
         yield 'Inline shortcode defined in bundle config' => ['test-config-inline'];
         yield 'ESI-based shortcode defined in bundle config' => ['test-config-esi'];
@@ -58,13 +61,48 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         self::assertStringContainsString('<esi:include ', $this->processShortcodes("[$shortcodeName foo=bar]", $request));
     }
 
-    public static function provideEsiShortcodes(): Generator
+    public function provideEsiShortcodes(): Generator
     {
         yield 'ESI-based shortcode defined in bundle configuration' => ['test-config-esi'];
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
-    private function processShortcodes(string $content, ?Request $request = null): string
+    /**
+     * @test
+     */
+    public function validate_valid_controller_names(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        new EmbeddedShortcodeHandler(
+            $this->createMock(FragmentHandler::class),
+            GuideController::class.'::detailAction',
+            'inline',
+            $this->createMock(RequestStack::class)
+        );
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideControllerNames
+     */
+    public function validate_invalid_controller_names(string $controllerName): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        new EmbeddedShortcodeHandler($this->createMock(FragmentHandler::class), $controllerName, 'inline', $this->createMock(RequestStack::class));
+    }
+
+    public function provideControllerNames(): Generator
+    {
+        yield 'Empty string' => [''];
+        yield 'Not existing controller' => ['Foo/Bar/Not/Exist::method'];
+        yield 'Missing method name' => [GuideController::class];
+        yield 'Not existing method' => [GuideController::class.'_notExistingMethod'];
+    }
+
+    private function processShortcodes(string $content, Request $request = null): string
     {
         self::bootKernel();
 

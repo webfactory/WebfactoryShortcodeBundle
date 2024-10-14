@@ -33,17 +33,18 @@ class EmbeddedShortcodeHandler
     /** @var RequestStack */
     private $requestStack;
 
-    /**
-     * @param string $controllerName
-     * @param string $renderer
-     */
     public function __construct(
         FragmentHandler $fragmentHandler,
-        $controllerName,
-        $renderer,
+        string $controllerName,
+        string $renderer,
         RequestStack $requestStack,
-        ?LoggerInterface $logger = null
+        LoggerInterface $logger = null
     ) {
+        $callableFragments = explode('::', $controllerName);
+        if (!is_array($callableFragments) || !isset($callableFragments[1]) || !method_exists($callableFragments[0], $callableFragments[1])) {
+            throw new \InvalidArgumentException('The controller method: "'.$controllerName.'" does not exist.');
+        }
+
         $this->fragmentHandler = $fragmentHandler;
         $this->controllerName = $controllerName;
         $this->renderer = $renderer;
