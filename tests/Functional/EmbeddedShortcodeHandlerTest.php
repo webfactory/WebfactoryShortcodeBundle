@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
-use Webfactory\ShortcodeBundle\Controller\GuideController;
 use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
 
