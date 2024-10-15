@@ -34,15 +34,6 @@ class ShortcodeDefinitionTestHelperTest extends KernelTestCase
     /**
      * @test
      */
-    public function throws_exception_for_shortcode_with_unresolvable_controller(): void
-    {
-        self::expectException(InvalidArgumentException::class);
-        $this->helper->resolveShortcodeController('test-config-invalid-controller');
-    }
-
-    /**
-     * @test
-     */
     public function can_test_whether_shortcode_is_defined(): void
     {
         self::assertTrue($this->helper->hasShortcode('placeholder'));

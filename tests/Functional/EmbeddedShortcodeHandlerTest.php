@@ -95,7 +95,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         new EmbeddedShortcodeHandler($this->createMock(FragmentHandler::class), $controllerName, 'inline', $this->createMock(RequestStack::class));
     }
 
-    public function provideControllerNames(): Generator
+    public static function provideControllerNames(): Generator
     {
         yield 'Empty string' => [''];
         yield 'Not existing controller' => ['Foo\Bar::baz'];
