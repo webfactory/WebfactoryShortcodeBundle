@@ -2,7 +2,6 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
-use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Thunder\Shortcode\Handler\PlaceholderHandler;
