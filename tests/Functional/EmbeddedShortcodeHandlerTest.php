@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
+use Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController;
 
 /**
  * Test shortcode processing using EmbeddedShortcodeHandler and a fixture ShortodeTestController,
