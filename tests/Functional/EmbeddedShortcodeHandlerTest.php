@@ -3,10 +3,14 @@
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Generator;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler;
 use Webfactory\ShortcodeBundle\Test\EndToEndTestHelper;
+use Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController;
 
 /**
  * Test shortcode processing using EmbeddedShortcodeHandler and a fixture ShortodeTestController,
@@ -62,6 +66,41 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
     {
         yield 'ESI-based shortcode defined in bundle configuration' => ['test-config-esi'];
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
+    }
+
+    /**
+     * @test
+     */
+    public function throws_no_exception_on_valid_controller_name(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        new EmbeddedShortcodeHandler(
+            $this->createMock(FragmentHandler::class),
+            ShortcodeTestController::class.'::test',
+            'inline',
+            $this->createMock(RequestStack::class)
+        );
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideControllerNames
+     */
+    public function throws_exception_on_invalid_controller_names(string $controllerName): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new EmbeddedShortcodeHandler($this->createMock(FragmentHandler::class), $controllerName, 'inline', $this->createMock(RequestStack::class));
+    }
+
+    public static function provideControllerNames(): Generator
+    {
+        yield 'Empty string' => [''];
+        yield 'Not existing controller' => ['Foo\Bar::baz'];
+        yield 'Missing method name' => [ShortcodeTestController::class];
+        yield 'Not existing method' => [ShortcodeTestController::class.'_notExistingMethod'];
     }
 
     private function processShortcodes(string $content, ?Request $request = null): string
