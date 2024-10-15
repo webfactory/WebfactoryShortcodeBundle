@@ -71,13 +71,13 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
     /**
      * @test
      */
-    public function validate_valid_controller_names(): void
+    public function throws_no_exception_on_valid_controller_name(): void
     {
         $this->expectNotToPerformAssertions();
 
         new EmbeddedShortcodeHandler(
             $this->createMock(FragmentHandler::class),
-            GuideController::class.'::detailAction',
+            ShortcodeTestController::class.'::test',
             'inline',
             $this->createMock(RequestStack::class)
         );
@@ -88,7 +88,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
      *
      * @dataProvider provideControllerNames
      */
-    public function validate_invalid_controller_names(string $controllerName): void
+    public function throws_exception_on_invalid_controller_names(string $controllerName): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -98,9 +98,9 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
     public function provideControllerNames(): Generator
     {
         yield 'Empty string' => [''];
-        yield 'Not existing controller' => ['Foo/Bar/Not/Exist::method'];
-        yield 'Missing method name' => [GuideController::class];
-        yield 'Not existing method' => [GuideController::class.'_notExistingMethod'];
+        yield 'Not existing controller' => ['Foo\Bar::baz'];
+        yield 'Missing method name' => [ShortcodeTestController::class];
+        yield 'Not existing method' => [ShortcodeTestController::class.'_notExistingMethod'];
     }
 
     private function processShortcodes(string $content, ?Request $request = null): string
