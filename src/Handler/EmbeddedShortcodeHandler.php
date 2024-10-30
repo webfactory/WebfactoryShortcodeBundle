@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Handler;
 
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,17 +34,15 @@ class EmbeddedShortcodeHandler
     /** @var RequestStack */
     private $requestStack;
 
-    /**
-     * @param string $controllerName
-     * @param string $renderer
-     */
     public function __construct(
         FragmentHandler $fragmentHandler,
-        $controllerName,
-        $renderer,
+        string $controllerName,
+        string $renderer,
         RequestStack $requestStack,
         ?LoggerInterface $logger = null
     ) {
+        $this->validateControllerName($controllerName);
+
         $this->fragmentHandler = $fragmentHandler;
         $this->controllerName = $controllerName;
         $this->renderer = $renderer;
@@ -89,5 +88,23 @@ class EmbeddedShortcodeHandler
     public function getControllerName(): string
     {
         return $this->controllerName;
+    }
+
+    private function validateControllerName(string $controllerName): void
+    {
+        if (class_exists($controllerName)) {
+            // Check with method_exists instead of is_callable, because is_callable would need an object instance to
+            // positively test an invokable classes
+            if (method_exists($controllerName, '__invoke')) {
+                return;
+            }
+
+            throw new InvalidArgumentException('The configured controller "'.$controllerName.'" does not refer a method. Although a class "'.$controllerName.'" exists, but has no __invoke method.');
+        }
+
+        $callableFragments = explode('::', $controllerName);
+        if (!\is_array($callableFragments) || 2 !== \count($callableFragments) || !method_exists($callableFragments[0], $callableFragments[1])) {
+            throw new InvalidArgumentException('The controller method: "'.$controllerName.'" does not exist.');
+        }
     }
 }

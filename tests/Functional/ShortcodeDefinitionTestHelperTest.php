@@ -2,7 +2,6 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
-use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Thunder\Shortcode\Handler\PlaceholderHandler;
@@ -29,15 +28,6 @@ class ShortcodeDefinitionTestHelperTest extends KernelTestCase
     {
         self::expectException(RuntimeException::class);
         $this->helper->resolveShortcodeController('placeholder'); // uses the \Thunder\Shortcode\Handler\PlaceholderHandler handler class directly
-    }
-
-    /**
-     * @test
-     */
-    public function throws_exception_for_shortcode_with_unresolvable_controller(): void
-    {
-        self::expectException(InvalidArgumentException::class);
-        $this->helper->resolveShortcodeController('test-config-invalid-controller');
     }
 
     /**
