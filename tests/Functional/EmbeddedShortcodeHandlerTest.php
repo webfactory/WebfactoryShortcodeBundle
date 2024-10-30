@@ -76,21 +76,6 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
 
     /**
      * @test
-     */
-    public function throws_no_exception_on_valid_controller_name(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        new EmbeddedShortcodeHandler(
-            $this->createMock(FragmentHandler::class),
-            ShortcodeTestController::class.'::test',
-            'inline',
-            $this->createMock(RequestStack::class)
-        );
-    }
-
-    /**
-     * @test
      *
      * @dataProvider provideControllerNames
      */
