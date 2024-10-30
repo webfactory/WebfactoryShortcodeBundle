@@ -68,6 +68,12 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
+    /** @test */
+    public function invokable_controller_can_be_used(): void
+    {
+        self::assertSame('invokable-controller-response', $this->processShortcodes('<p>[test-config-invokable]</p>'));
+    }
+
     /**
      * @test
      */
