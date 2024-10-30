@@ -92,6 +92,7 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'Not existing controller' => ['Foo\Bar::baz'];
         yield 'Missing method name' => [ShortcodeTestController::class];
         yield 'Not existing method' => [ShortcodeTestController::class.'_notExistingMethod'];
+        yield 'Missing class' => ['ThisClassDoesNotExist'];
     }
 
     private function processShortcodes(string $content, ?Request $request = null): string
