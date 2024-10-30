@@ -103,7 +103,7 @@ class EmbeddedShortcodeHandler
         }
 
         $callableFragments = explode('::', $controllerName);
-        if (!\is_array($callableFragments) || count($callableFragments) !== 2 || !method_exists($callableFragments[0], $callableFragments[1])) {
+        if (!\is_array($callableFragments) || 2 !== \count($callableFragments) || !method_exists($callableFragments[0], $callableFragments[1])) {
             throw new InvalidArgumentException('The controller method: "'.$controllerName.'" does not exist.');
         }
     }
