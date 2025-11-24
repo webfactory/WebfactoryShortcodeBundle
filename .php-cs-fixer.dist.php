@@ -25,5 +25,6 @@ return (new PhpCsFixer\Config())
             ->notPath('var/cache')
             ->notPath('vendor/')
             ->notPath('tests/Fixtures/cache')
+            ->notPath('src/Resources/config')
     )
 ;
