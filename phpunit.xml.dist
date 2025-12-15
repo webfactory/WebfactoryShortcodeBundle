@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="tests/bootstrap.php" cacheDirectory=".phpunit.cache">
-    <php>
-        <env name="SHELL_VERBOSITY" value="-1" />
-        <server name="KERNEL_CLASS" value="\Webfactory\ShortcodeBundle\Tests\Fixtures\TestKernel" />
-        <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=9999" />
-    </php>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="tests/bootstrap.php"
+    colors="true">
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
             <exclude>tests/Functional/ShortcodeTest.php</exclude>
         </testsuite>
     </testsuites>
+
+    <source ignoreSuppressionOfDeprecations="true">
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <php>
+        <server name="KERNEL_CLASS" value="Webfactory\ShortcodeBundle\Tests\Fixtures\TestKernel" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+    </php>
+
 </phpunit>

@@ -1,7 +1,16 @@
 <?php
 
 use Symfony\Component\ErrorHandler\DebugClassLoader;
+use Symfony\Component\ErrorHandler\ErrorHandler;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+// Work around https://github.com/symfony/symfony/issues/53812 for the time being (issue starting with Symfony 6.4 or 7.1 and PHPUnit 11 or 12?)
+set_exception_handler([new ErrorHandler(), 'handleException']);
+
+// Ensure a fresh cache every time tests are run,
+// even with debug mode disabled (https://symfony.com/doc/current/testing.html#set-up-your-test-environment)
+(new Symfony\Component\Filesystem\Filesystem())->remove(__DIR__.'/Fixtures/var/cache/test');
+
+// Use DebugClassLoader to catch certain deprecations that can only be found through source code analysis
 DebugClassLoader::enable();
