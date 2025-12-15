@@ -101,9 +101,9 @@ By default, the `RemoveWrappingParagraphElementsEventHandler` contained in this 
 
 ## Activating the Shortcode Guide
 
-The optional Shortcode Guide is a controller providing an overview page of all configured shortcodes. For every shortcode, there is also a detail page including a rendered example. 
+The optional Shortcode Guide is a controller providing an overview page of all configured shortcodes. For every shortcode, there is also a detail page including a rendered example.
 
-To use the Shortcode Guide, include the routing configuration from `@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml`.
+To use the Shortcode Guide, include the routing configuration from `@WebfactoryShortcodeBundle/Resources/config/guide-routing.php`.
 
 ⚠️ You probably want to do this only for your Symfony `dev` and/or `test` environment, and possibly restrict access in your security configuration in addition to that.
 
@@ -111,7 +111,7 @@ To use the Shortcode Guide, include the routing configuration from `@WebfactoryS
 # src/routing.yml
 _shortcode-guide:
     prefix: /shortcodes
-    resource: "@WebfactoryShortcodeBundle/Resources/config/guide-routing.xml"
+    resource: "@WebfactoryShortcodeBundle/Resources/config/guide-routing.php"
 ```
 
 With the route prefix defined as above, visit `/shortcodes/` to see a list of all defined shortcodes. If you want to add descriptions to shortcodes and/or provide the example shortcode that shall be rendered on the detail page, you can add this information when configuring shortcodes:
@@ -241,6 +241,5 @@ Assuming that your application configuration registers a handler for the `text` 
 This bundle was started at webfactory GmbH, Bonn.
 
 - <https://www.webfactory.de>
-- <https://twitter.com/webfactory>
 
-Copyright 2018-2023 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
+Copyright 2018-2025 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
