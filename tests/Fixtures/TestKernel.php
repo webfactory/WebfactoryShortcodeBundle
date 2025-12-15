@@ -32,7 +32,7 @@ final class TestKernel extends Kernel
                 'test' => true,
                 'esi' => ['enabled' => true],
                 'fragments' => ['enabled' => true],
-                'router' => ['resource' => '%kernel.project_dir%/src/Resources/config/guide-routing.xml'],
+                'router' => ['resource' => '%kernel.project_dir%/src/Resources/config/guide-routing.php'],
             ] + (Kernel::VERSION_ID < 70000 ? ['annotations' => ['enabled' => false]] : []));
 
             $container->loadFromExtension('twig', [
