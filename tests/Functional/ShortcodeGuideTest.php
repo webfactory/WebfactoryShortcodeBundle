@@ -2,13 +2,12 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ShortcodeGuideTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function shortcode_guide_contains_test_entry(): void
     {
         $client = static::createClient();

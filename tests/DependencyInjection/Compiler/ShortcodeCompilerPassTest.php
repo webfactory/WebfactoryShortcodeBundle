@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,7 +32,7 @@ final class ShortcodeCompilerPassTest extends TestCase
             ->getMock();
     }
 
-    /** @test */
+    #[Test]
     public function tagged_services_are_added_as_handlers_to_handler_container(): void
     {
         $this->containerBuilder->expects($this->once())
@@ -63,7 +64,7 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /** @test */
+    #[Test]
     public function no_tagged_services_do_no_harm(): void
     {
         $this->containerBuilder->expects($this->once())
@@ -73,7 +74,7 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /** @test */
+    #[Test]
     public function shortcode_guide_service_gets_configured_if_set(): void
     {
         $this->containerBuilder->expects($this->once())
@@ -116,7 +117,7 @@ final class ShortcodeCompilerPassTest extends TestCase
         $this->compilerPass->process($this->containerBuilder);
     }
 
-    /** @test */
+    #[Test]
     public function missing_shortcode_guide_service_does_no_harm(): void
     {
         $this->containerBuilder->expects($this->once())

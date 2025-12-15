@@ -4,6 +4,8 @@ namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,23 +20,20 @@ use Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController
  */
 class EmbeddedShortcodeHandlerTest extends KernelTestCase
 {
-    /** @test */
+    #[Test]
     public function paragraphs_wrapping_shortcodes_get_removed(): void
     {
         self::assertSame('test', $this->processShortcodes('<p>[test-config-inline]</p>'));
     }
 
-    /** @test */
+    #[Test]
     public function content_without_shortcodes_wont_be_changed(): void
     {
         self::assertSame('<p>Content without shortcode</p>', $this->processShortcodes('<p>Content without shortcode</p>'));
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideShortcodeNames
-     */
+    #[DataProvider('provideShortcodeNames')]
+    #[Test]
     public function expand_shortcodes_registered_in_different_ways(string $shortcodeName): void
     {
         // All shortcodes are set up as fixtures and use ShortcodeTestController
@@ -49,11 +48,8 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service definitions' => ['test-service-esi'];
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideEsiShortcodes
-     */
+    #[DataProvider('provideEsiShortcodes')]
+    #[Test]
     public function processing_with_esi_fragments(string $shortcodeName): void
     {
         $request = new Request([], [], [], [], [], ['SCRIPT_URL' => '/', 'HTTP_HOST' => 'localhost']);
@@ -68,17 +64,14 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service configuration' => ['test-service-esi'];
     }
 
-    /** @test */
+    #[Test]
     public function invokable_controller_can_be_used(): void
     {
         self::assertSame('invokable-controller-response', $this->processShortcodes('<p>[test-config-invokable]</p>'));
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideControllerNames
-     */
+    #[DataProvider('provideControllerNames')]
+    #[Test]
     public function throws_exception_on_invalid_controller_names(string $controllerName): void
     {
         $this->expectException(InvalidArgumentException::class);
