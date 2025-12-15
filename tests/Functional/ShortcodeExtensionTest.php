@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -9,17 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ShortcodeExtensionTest extends KernelTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function resolve_placeholder_shortcode_in_twig(): void
     {
         self::assertSame('News from year 1970.', $this->renderTemplate('{% apply shortcodes %}[placeholder year=1970]News from year %year%.[/placeholder]{% endapply %}'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function filter_returns_safe_html(): void
     {
         self::assertSame('<p>HTML</p>', $this->renderTemplate('{{ "<p>HTML</p>" | shortcodes }}'));

@@ -2,15 +2,14 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 use Webfactory\ShortcodeBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function configure_shortcode_with_controller_reference_only(): void
     {
         $processedConfig = $this->processSingleConfig(['shortcodes' => ['test-1' => 'Foo::bar']]);
@@ -19,9 +18,7 @@ class ConfigurationTest extends TestCase
         self::assertSame('Foo::bar', $processedConfig['shortcodes']['test-1']['controller']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function configure_shortcode_with_controller_as_key(): void
     {
         $processedConfig = $this->processSingleConfig(['shortcodes' => ['test-1' => ['controller' => 'Foo::bar']]]);
@@ -29,9 +26,7 @@ class ConfigurationTest extends TestCase
         self::assertSame('Foo::bar', $processedConfig['shortcodes']['test-1']['controller']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function configure_shortcode_with_method(): void
     {
         $processedConfig = $this->processSingleConfig(['shortcodes' => ['test-1' => ['controller' => 'Foo::bar', 'method' => 'esi']]]);

@@ -7,6 +7,8 @@ use PHPUnit_Framework_IncompleteTestError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use function is_array;
+use function is_string;
 
 trigger_deprecation('webfactory/shortcode-bundle', '2.1.0', 'The '.ShortcodeTest::class.' class is deprecated without replacement; see the bundle README file for suggestions on how to test your shortcodes.');
 
@@ -95,11 +97,11 @@ abstract class ShortcodeTest extends WebTestCase
 
     private function getCustomParametersAsString($customParametersAsMixed): ?string
     {
-        if (\is_string($customParametersAsMixed)) {
+        if (is_string($customParametersAsMixed)) {
             return $customParametersAsMixed;
         }
 
-        if (\is_array($customParametersAsMixed)) {
+        if (is_array($customParametersAsMixed)) {
             $customParametersAsString = '';
             foreach ($customParametersAsMixed as $name => $value) {
                 $customParametersAsString .= $name.'='.$value.' ';

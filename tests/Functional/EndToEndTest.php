@@ -3,6 +3,8 @@
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 final class EndToEndTest extends KernelTestCase
 {
-    /** @test */
+    #[Test]
     public function paragraphs_wrapping_shortcodes_get_removed(): void
     {
         $this->assertEquals(
@@ -22,7 +24,7 @@ final class EndToEndTest extends KernelTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function content_without_shortcodes_wont_be_changed(): void
     {
         $this->assertEquals(
@@ -31,11 +33,8 @@ final class EndToEndTest extends KernelTestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideShortcodeNames
-     */
+    #[DataProvider('provideShortcodeNames')]
+    #[Test]
     public function expand_shortcode_in__twig(string $shortcodeName): void
     {
         $result = $this->renderTwig('{{ content | shortcodes }}', ['content' => "[$shortcodeName foo=bar]"]);
@@ -51,11 +50,8 @@ final class EndToEndTest extends KernelTestCase
         yield 'ESI-based shortcode defined in service definitions' => ['test-service-esi'];
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideEsiShortcodes
-     */
+    #[DataProvider('provideEsiShortcodes')]
+    #[Test]
     public function uses_esi_fragments(string $shortcodeName): void
     {
         $request = new Request([], [], [], [], [], ['SCRIPT_URL' => '/', 'HTTP_HOST' => 'localhost']);

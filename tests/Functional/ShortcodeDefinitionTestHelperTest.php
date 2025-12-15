@@ -2,6 +2,7 @@
 
 namespace Webfactory\ShortcodeBundle\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Thunder\Shortcode\Handler\PlaceholderHandler;
@@ -21,35 +22,27 @@ class ShortcodeDefinitionTestHelperTest extends KernelTestCase
         $this->helper = static::getContainer()->get(ShortcodeDefinitionTestHelper::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_exception_for_handlers_that_do_not_use_controllers(): void
     {
         self::expectException(RuntimeException::class);
         $this->helper->resolveShortcodeController('placeholder'); // uses the \Thunder\Shortcode\Handler\PlaceholderHandler handler class directly
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_test_whether_shortcode_is_defined(): void
     {
         self::assertTrue($this->helper->hasShortcode('placeholder'));
         self::assertFalse($this->helper->hasShortcode('unknown-shortcode'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_retrieve_handler(): void
     {
         self::assertInstanceOf(PlaceholderHandler::class, $this->helper->getHandler('placeholder'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_be_used_to_assert_controller_class_and_method(): void
     {
         $controller = $this->helper->resolveShortcodeController('test-config-inline');
