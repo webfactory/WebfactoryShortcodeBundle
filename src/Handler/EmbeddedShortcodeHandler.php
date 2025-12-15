@@ -39,7 +39,7 @@ class EmbeddedShortcodeHandler
         string $controllerName,
         string $renderer,
         RequestStack $requestStack,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
     ) {
         $this->validateControllerName($controllerName);
 

@@ -10,24 +10,31 @@ on:
     pull_request:
 
 env:
-    PHP_VERSION: 8.1
+    PHP_VERSION: 8.4
 
 jobs:
     composer-require-checker:
         name: Check missing composer requirements
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
+        if: github.actor != 'dependabot[bot]'
         steps:
             -   uses: shivammathur/setup-php@v2
                 with:
                   php-version: ${{ env.PHP_VERSION }}
                   coverage: none
-                  tools: composer:v2
+                  tools: composer:v2, flex
             -   uses: actions/checkout@v4
             -   uses: actions/cache@v4
                 with:
                     path: vendor
-                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
+                    key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json', 'composer.lock') }}
                     restore-keys: |
-                        composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ matrix.symfony-locked-version }}-${{ matrix.dependency-version }}-
-            -   run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
-            -   uses: docker://ghcr.io/webfactory/composer-require-checker:4.6.0
+                        composer-${{ runner.os }}-${{ env.PHP_VERSION }}-
+                        composer-${{ runner.os }}-
+            -   run: |
+                    composer install --no-interaction --no-progress --ansi --no-scripts
+                    composer show
+                env:
+                    SYMFONY_REQUIRE: 7.*
+            -   name: ComposerRequireChecker
+                uses: docker://ghcr.io/webfactory/composer-require-checker:4.18.0
