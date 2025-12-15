@@ -14,6 +14,7 @@
         "symfony/form": "^5.4|^6.0|^7.0",
         "symfony/http-foundation": "^5.4|^6.0|^7.0",
         "symfony/http-kernel": "^5.4|^6.0|^7.0",
+        "symfony/routing": "^5.4|^6.0|^7.0",
         "thunderer/shortcode": "^0.6.5|^0.7",
         "twig/twig": "^2.0|^3.0"
     },
@@ -25,7 +26,6 @@
         "symfony/expression-language": "^5.4|^6.0|^7.0",
         "symfony/framework-bundle": "^5.4|^6.0|^7.0",
         "symfony/phpunit-bridge": ">= 6.0",
-        "symfony/routing": "^5.4|^6.0|^7.0",
         "symfony/twig-bundle": "^5.4|^6.0|^7.0",
         "symfony/yaml": "^5.4|^6.0|^7.0"
     },
