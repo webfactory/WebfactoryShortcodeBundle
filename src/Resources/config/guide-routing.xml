@@ -4,12 +4,6 @@
         xsi:schemaLocation="http://symfony.com/schema/routing
         http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="webfactory.shortcode.guide-list" path="/">
-        <default key="_controller">Webfactory\ShortcodeBundle\Controller\GuideController::listAction</default>
-    </route>
-
-    <route id="webfactory.shortcode.guide-detail" path="/{shortcode}/">
-        <default key="_controller">Webfactory\ShortcodeBundle\Controller\GuideController::detailAction</default>
-    </route>
+    <import resource="guide-routing.php" />
 
 </routes>
