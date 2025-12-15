@@ -13,10 +13,11 @@ jobs:
             fail-fast: false
             matrix:
                 include:
+                    - { php-version: 8.1, symfony-version: 6.4.*, dependency-version: prefer-lowest }
                     - { php-version: 8.1, symfony-version: 6.4.*, dependency-version: prefer-stable }
                     - { php-version: 8.3, symfony-version: 7.*, dependency-version: prefer-stable }
                     - { php-version: 8.4, symfony-version: 8.*, dependency-version: prefer-stable }
-        name: PHPUnit (PHP ${{matrix.php-version}}, Symfony version lock ${{ matrix.symfony-version || 'none' }}, ${{ matrix.dependency-version }})
+        name: PHPUnit (PHP ${{ matrix.php-version }}, Symfony version lock ${{ matrix.symfony-version }}, ${{ matrix.dependency-version }})
         steps:
             -   uses: actions/checkout@v4
             -   uses: shivammathur/setup-php@v2
@@ -33,5 +34,6 @@ jobs:
             -   run: composer update --${{ matrix.dependency-version }} --no-interaction --no-scripts --no-progress --ansi
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony-version }}
+                    COMPOSER_NO_SECURITY_BLOCKING: 1
             -   run: composer show
             -   run: vendor/bin/phpunit --display-warnings --display-deprecations
