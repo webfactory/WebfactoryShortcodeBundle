@@ -68,7 +68,7 @@ abstract class ShortcodeTest extends WebTestCase
      */
     protected function assertHttpStatusCodeWhenCrawlingRenderedExample(
         int $expectedStatusCode,
-        /* array */ $customParameters = null
+        /* array */ $customParameters = null,
     ): Crawler {
         $urlWithRenderedExample = $this->getUrlWithRenderedExample($customParameters);
 

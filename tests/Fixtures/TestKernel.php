@@ -57,12 +57,12 @@ final class TestKernel extends Kernel
                 ],
             ]);
 
-            $container->register(\Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\ShortcodeTestController::class)
+            $container->register(ShortcodeTestController::class)
                 ->setAutoconfigured(true)
                 ->setAutowired(true)
                 ->addTag('controller.service_arguments');
 
-            $container->register(\Webfactory\ShortcodeBundle\Tests\Fixtures\Controller\InvokableShortcodeTestController::class)
+            $container->register(InvokableShortcodeTestController::class)
                 ->setAutoconfigured(true)
                 ->setAutowired(true)
                 ->addTag('controller.service_arguments');
