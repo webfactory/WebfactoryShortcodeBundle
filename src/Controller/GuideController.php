@@ -63,7 +63,7 @@ final class GuideController
         $shortcodeTag = $this->shortcodeTags[$shortcode];
 
         // if custom parameters are provided, replace the example
-        $customParameters = $request->get('customParameters');
+        $customParameters = $request->query->get('customParameters');
         if ($customParameters) {
             $shortcodeTag['example'] = $shortcode.' '.$customParameters;
         }
