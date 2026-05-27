@@ -2,7 +2,6 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function(ContainerConfigurator $container) {
@@ -31,11 +30,13 @@ return static function(ContainerConfigurator $container) {
         ->public()
         ->factory([service(\Webfactory\ShortcodeBundle\Factory\ProcessorFactory::class), 'create']);
 
-    $services->set(\Thunder\Shortcode\EventContainer\EventContainer::class)
-        ->call('addListener', [
-            \Thunder\Shortcode\Events::REPLACE_SHORTCODES,
-            inline_service(\Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler::class),
-        ]);
+    $services->set(\Thunder\Shortcode\EventContainer\EventContainer::class);
+
+    $services->set(\Webfactory\ShortcodeBundle\Handler\RemoveWrappingParagraphElementsEventHandler::class)
+        ->tag('webfactory.shortcode.event_listener', ['event' => \Thunder\Shortcode\Events::REPLACE_SHORTCODES]);
+
+    $services->set(\Webfactory\ShortcodeBundle\Handler\RemovePendingParagraphElementsInsideShortcodeEventHandler::class)
+        ->tag('webfactory.shortcode.event_listener', ['event' => \Thunder\Shortcode\Events::REPLACE_SHORTCODES]);
 
     $services->set('Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.esi', \Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler::class)
         ->abstract()

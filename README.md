@@ -95,6 +95,17 @@ services:
             - { name: 'webfactory.shortcode', shortcode: 'my-shortcode-name' }
 ```
 
+### Registering Event Listeners
+
+The [thunderer/Shortcode](https://github.com/thunderer/Shortcode) package uses an `EventContainer` to dispatch events during shortcode processing. You can register your own event listeners by tagging services with `webfactory.shortcode.event_listener` and specifying the `event` attribute:
+
+```yaml
+services:
+    My\Shortcode\EventListener:
+        tags:
+            - { name: 'webfactory.shortcode.event_listener', event: 'event.replace-shortcodes' }
+```
+
 ### Removing `<p>` Tags around Shortcodes
 
 By default, the `RemoveWrappingParagraphElementsEventHandler` contained in this bundle will be used to remove `<p>...</p>` tags around shortcodes, if the shortcode is the only text content in that paragraph. 

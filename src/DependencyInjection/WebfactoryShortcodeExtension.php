@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Webfactory\ShortcodeBundle\Handler\RemovePendingParagraphElementsInsideShortcodeEventHandler;
 
 /**
  * Loads the bundle configuration.
@@ -26,6 +27,11 @@ final class WebfactoryShortcodeExtension extends Extension
 
         $container->setParameter('webfactory_shortcode.recursion_depth', $config['recursion_depth']);
         $container->setParameter('webfactory_shortcode.max_iterations', $config['max_iterations']);
+
+        if (!$config['remove_pending_inner_paragraph_elements']) {
+            $container->getDefinition(RemovePendingParagraphElementsInsideShortcodeEventHandler::class)
+                ->clearTag('webfactory.shortcode.event_listener');
+        }
 
         foreach ($config['shortcodes'] as $shortcodeName => $shortcodeDefinition) {
             $definition = new ChildDefinition('Webfactory\ShortcodeBundle\Handler\EmbeddedShortcodeHandler.'.$shortcodeDefinition['method']);

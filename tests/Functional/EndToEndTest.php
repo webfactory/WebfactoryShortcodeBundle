@@ -25,6 +25,15 @@ final class EndToEndTest extends KernelTestCase
     }
 
     #[Test]
+    public function paragraphs_inside_shortcode_with_content_get_removed(): void
+    {
+        $this->assertEquals(
+            '<p>the answer is 42</p>',
+            $this->renderTwig("{{ '<p>[placeholder value=42]</p><p>the answer is %value%</p><p>[/placeholder]</p>' | shortcodes }}")
+        );
+    }
+
+    #[Test]
     public function content_without_shortcodes_wont_be_changed(): void
     {
         $this->assertEquals(
