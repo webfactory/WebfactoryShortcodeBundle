@@ -42,6 +42,7 @@ final class TestKernel extends Kernel
             $testControllerAction = ShortcodeTestController::class.'::test';
 
             $container->loadFromExtension('webfactory_shortcode', [
+                'remove_pending_inner_paragraph_elements' => true,
                 'shortcodes' => [
                     'test-config-inline' => $testControllerAction,
                     'test-config-esi' => [

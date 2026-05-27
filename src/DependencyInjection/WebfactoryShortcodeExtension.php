@@ -29,7 +29,7 @@ final class WebfactoryShortcodeExtension extends Extension
         $container->setParameter('webfactory_shortcode.recursion_depth', $config['recursion_depth']);
         $container->setParameter('webfactory_shortcode.max_iterations', $config['max_iterations']);
 
-        if ($config['remove_pending_inner_paragraph_elements']) {
+        if (! $config['remove_pending_inner_paragraph_elements']) {
             $container->getDefinition(RemovePendingParagraphElementsInsideShortcodeEventHandler::class)
                 ->clearTag('webfactory.shortcode.event_listener');
         }
