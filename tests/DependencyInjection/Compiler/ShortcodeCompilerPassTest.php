@@ -4,6 +4,7 @@ namespace Webfactory\ShortcodeBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -30,9 +31,9 @@ final class ShortcodeCompilerPassTest extends TestCase
     #[Test]
     public function tagged_services_are_added_as_handlers_to_handler_container(): void
     {
-        $this->containerBuilder->register('service_id1', \stdClass::class)
+        $this->containerBuilder->register('service_id1', stdClass::class)
             ->addTag('webfactory.shortcode', ['shortcode' => 'shortcode1']);
-        $this->containerBuilder->register('service_id2', \stdClass::class)
+        $this->containerBuilder->register('service_id2', stdClass::class)
             ->addTag('webfactory.shortcode', ['shortcode' => 'shortcode2']);
 
         $this->compilerPass->process($this->containerBuilder);
@@ -68,9 +69,9 @@ final class ShortcodeCompilerPassTest extends TestCase
     #[Test]
     public function shortcode_guide_service_gets_configured_if_set(): void
     {
-        $this->containerBuilder->register('service_id1', \stdClass::class)
+        $this->containerBuilder->register('service_id1', stdClass::class)
             ->addTag('webfactory.shortcode', ['shortcode' => 'shortcode1']);
-        $this->containerBuilder->register('service_id2', \stdClass::class)
+        $this->containerBuilder->register('service_id2', stdClass::class)
             ->addTag('webfactory.shortcode', ['shortcode' => 'shortcode2']);
 
         $this->containerBuilder->setDefinition(GuideController::class, new Definition(GuideController::class));
