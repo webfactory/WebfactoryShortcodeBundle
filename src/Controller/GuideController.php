@@ -68,7 +68,10 @@ final class GuideController
             $shortcodeTag['example'] = $shortcode.' '.$customParameters;
         }
 
-        $example = '['.($shortcodeTag['example'] ?? $shortcode).']';
+        $example = $shortcodeTag['example'] ?? $shortcode;
+        if (!str_starts_with($example, '[')) {
+            $example = '['.$example.']';
+        }
 
         if ($this->formFactory) {
             $formBuilder = $this->formFactory->createBuilder(FormType::class, ['example' => $example], ['method' => 'GET']);
