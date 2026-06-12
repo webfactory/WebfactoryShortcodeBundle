@@ -8,6 +8,6 @@ class ShortcodeTestController
 {
     public function test(?string $foo = null, ?string $content = null): Response
     {
-        return new Response('test'.($foo ? ' foo='.$foo : '').($content !== null ? ' content='.$content : ''));
+        return new Response('test'.($foo ? ' foo='.$foo : '').(null !== $content ? ' content='.$content : ''));
     }
 }
