@@ -6,8 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ShortcodeTestController
 {
-    public function test(?string $foo = null): Response
+    public function test(?string $foo = null, ?string $content = null): Response
     {
-        return new Response('test'.($foo ? ' foo='.$foo : ''));
+        return new Response('test'.($foo ? ' foo='.$foo : '').($content !== null ? ' content='.$content : ''));
     }
 }

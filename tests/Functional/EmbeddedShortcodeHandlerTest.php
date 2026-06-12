@@ -70,6 +70,24 @@ class EmbeddedShortcodeHandlerTest extends KernelTestCase
         self::assertSame('invokable-controller-response', $this->processShortcodes('<p>[test-config-invokable]</p>'));
     }
 
+    #[Test]
+    public function content_between_tags_is_passed_to_controller(): void
+    {
+        self::assertSame('test content=Hello', $this->processShortcodes('[test-config-inline]Hello[/test-config-inline]'));
+    }
+
+    #[Test]
+    public function content_is_null_for_self_closing_shortcode(): void
+    {
+        self::assertSame('test', $this->processShortcodes('[test-config-inline]'));
+    }
+
+    #[Test]
+    public function content_attribute_overrides_content_between_tags(): void
+    {
+        self::assertSame('test content=override', $this->processShortcodes('[test-config-inline content=override]Hello[/test-config-inline]'));
+    }
+
     #[DataProvider('provideControllerNames')]
     #[Test]
     public function throws_exception_on_invalid_controller_names(string $controllerName): void

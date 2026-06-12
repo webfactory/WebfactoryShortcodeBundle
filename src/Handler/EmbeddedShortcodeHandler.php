@@ -68,7 +68,7 @@ class EmbeddedShortcodeHandler
 
         try {
             return $this->fragmentHandler->render(
-                new ControllerReference($this->controllerName, $shortcode->getParameters()),
+                new ControllerReference($this->controllerName, [...['content' => $shortcode->getContent()], ...$shortcode->getParameters()]),
                 $this->renderer
             );
         } catch (Throwable $exception) {
