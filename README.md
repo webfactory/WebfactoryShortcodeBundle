@@ -71,7 +71,7 @@ Then, when doing something like this in Twig:
 
 You can also use [ESI rendering](https://symfony.com/doc/current/http_cache/esi.html) for particular shortcodes. The advantage of ESI is that single shortcode replacements can be stored in edge caches and/or reverse proxies like Varnish and possibly be reused on multiple pages.
 
-⚠️ Take care: Due to the way ESI works, the (master) `Request` visible to controllers is no longer the one where the shortcode was used. Keep that in mind when you, for example, want to log the URLs where shortcodes are being used.
+⚠️ Take care: Due to the way ESI works, the (main) `Request` visible to controllers is no longer the one where the shortcode was used. Keep that in mind when you, for example, want to log the URLs where shortcodes are being used.
 
 To use ESI-based embedding for a particular shortcode, use a configuration like the following:
 
